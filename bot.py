@@ -8,8 +8,9 @@ import json
 import re
 import asyncio
 from google_trans_new import google_translator  
+import datetime as dt
 
-TOKEN = "TOKENsdfsdhfuihsdiufhsduifshduihsu"
+TOKEN = ".."
 KILLED = []
 
 startMSG = r"""
@@ -73,7 +74,9 @@ class MyCog(commands.Cog):
 		return int(re.search(r"https:\/\/mangadex\.org\/chapter\/(\d+)", message.content).group(1))
 
 	def chapters(self):
-		cookies = {}
+		cookies = {
+			
+		}
 		res = requests.get("https://mangadex.org/api/v2/group/8588", params = {'include':'chapters'}, cookies=cookies)
 		return res.json()["data"]["chapters"]
 
@@ -98,9 +101,17 @@ class MyCog(commands.Cog):
 			print("Errore al printer")
 			return
 
-class BuonGiorno(commands.Cog):
+class Greeting(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
+
+	async def is_greeting(self, greeting, ora, channel):
+		regex = re.compile(f'{greeting}')
+		message = discord.utils.find(lambda message: regex.search(message.content), await channel.history(limit=300, after=ora, oldest_first=False).flatten())
+		if message == None:
+			return False
+		else:
+			return True
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
@@ -108,12 +119,35 @@ class BuonGiorno(commands.Cog):
 		if message.author == self.bot.user:
 			return
 
+		hour = dt.datetime.now().hour
+
+		stato=None
+		greeting=None
+		is_greeting=None
+		orario=None
+
+		if hour > 6 and hour < 12:
+			greeting = f"'Giorno 👋 {message.author.mention}"
+			stato = "giorno"
+			orario = dt.datetime.today().replace(hour=6, minute=0, second=0, microsecond=0)
+		elif hour > 12 and hour < 18:
+			greeting = f"'Sera 👋 {message.author.mention}"
+			stato ="sera"
+			orario = dt.datetime.today().replace(hour=12, minute=0, second=0, microsecond=0)
+		else:
+			greeting = f"'Notte 👋 {message.author.mention}"
+			stato ="notte"
+			orario = dt.datetime.today().replace(hour=18, minute=0, second=0, microsecond=0)
+			if hour <=0:
+				orario -= dt.timedelta(days=1)
+
 		contenuto = message.content.lower()
-		if contenuto.find("giorno") >=0 and contenuto.find("un giorno")<0 and contenuto.find("il giorno")<0:
-			messaggio = "'Giorno 👋"
-			if message.author.id == 698559623526875168:
-				messaggio += " Sir. Cavaliere"
-			await message.channel.send(messaggio)
+		if contenuto.find(stato) >=0:
+			if not (await self.is_greeting(greeting, orario, message.channel)):
+				print(f"L'utente è {message.author.name} stato salutato")
+				await message.channel.send(greeting)
+			else:
+				print(f"L'utente è {message.author.name} gia stato salutato")
 
 class Traduttore(commands.Cog):
 	def __init__(self, bot):
@@ -132,7 +166,7 @@ class Traduttore(commands.Cog):
 
 		tr = translator.detect(message.content)
 		if len(tr)>0:
-			if tr[0] not in ['it', 'de', 'en', 'fr', 'nl', 'ro', 'su', 'tl', 'es', 'gu', 'haw', 'zh-CN', 'hmn', 'te', 'pl', 'ca', 'sm', 'eo', 'hi']:
+			if tr[0] not in ['gl', 'it', 'de', 'en', 'fr', 'nl', 'ro', 'su', 'tl', 'es', 'gu', 'haw', 'zh-CN', 'hmn', 'te', 'pl', 'ca', 'sm', 'eo', 'hi', 'mi', 'jw', 'el', 'so', 'da', 'ha', 'fi', 'ku', 'co', 'pt', 'sk', 'la']:
 				tran = translator.translate(message.content, lang_tgt='it')
 
 				# await discord.abc.Messageable.send(content=tran, reference=message)
@@ -200,58 +234,46 @@ class Reazioni(commands.Cog):
 			await ctx.channel.send("Reazioni attivate")
 		print(f"Bot è {self.REAZIONI}")
 
-class Domande(commands.Cog):
+class WhatAnime(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self.question.start()
-		self.domande = [
-			{
-				"domanda":"1+1=?",
-				"risposte":{
-					"a":{
-						"risposta":"1",
-						"vera":False
-					},"b":{
-						"risposta":"2",
-						"vera":True
-					}
-				}
-			}
-		]
+	
+	@commands.Cog.listener()
+	async def on_message(self, message):
 
-	@tasks.loop(seconds =600)
-	async def question(self):
-		membri = [mb for mb in self.bot.get_guild(698597723451949076).members if not mb.bot and mb.status != discord.Status.offline]
-		member = random.choice(membri)
-		domanda = random.choice(self.domande)
+		if message.author == bot.user: return
+		if message.channel.id != 787786882138112010: return
+		if len(message.attachments) == 0: return
 
-		tempo = 30
+		image = await message.attachments[0].read()
+		print(f"L'utente {message.author.name} ha ricercato un'anime.")
 
-		mg = f"Domanda a sorpresa per {member.mention}, se non rispondi o sbagli verrai ucciso. Hai {tempo} secondi.\n"
-		mg += f"{domanda['domanda']}\n"
-		mg += "\n".join(f"[{x}] - {domanda['risposte'][x]['risposta']}" for x in domanda['risposte'])
+		file = {'image': image}
+		url = "https://trace.moe/api/search"
+		res = requests.post(url, files=file)
 
+
+		# if bad_r.status_code
+		res.raise_for_status()
+
+		res = res.json()["docs"][0]
 		embed = discord.Embed(
-			title="DOMANDA",
-			colour = discord.Colour.teal()
+			title=res["title_romaji"],
+			colour = discord.Colour.dark_blue()
 		)
+		embed.add_field(name=f"Stagione", value=f"``{res['season']}``", inline=False)
+		embed.add_field(name=f"Episodio", value=f"``{res['episode']}``", inline=False)
+		embed.add_field(name=f"Al Momento", value=f"``{res['at']} secondi``", inline=False)
+		embed.add_field(name=f"Accuratezza", value=f"``{res['similarity']*100}%``", inline=False)
+		embed.add_field(name=f"Link", value=f"https://myanimelist.net/anime/{res['mal_id']}", inline=False)
+		if res['similarity'] < 0.87: 
+			embed.add_field(name=f"**POSSIBILE ERRORE**", value=f"⚠️⚠️⚠️⚠️⚠️⚠️", inline=False)
 
-		channel = self.bot.get_channel(717089928567193690)
-		await channel.send(mg)
+		image = await message.attachments[0].to_file()
+		# embed.set_image(url=image_url)
 
-		def check(message):
-			return message.content.lower() in [x for x in domanda["risposte"]] and message.channel == channel and message.author == member
-
-		msg = await self.bot.wait_for('message', check=check, timeout=tempo)
-
-		print(msg)
-
-		if domanda["risposte"][msg.content.lower()]["vera"]:
-			embed.add_field(name=f"Risposta:", value=f"CORRETTA", inline=False)
-			channel.send(embed=embed)
-		else:
-			embed.add_field(name=f"Risposta:", value=f"SBAGLIATA", inline=False)
-			channel.send(f"{member.mention} sei morto",embed=embed)
+		await message.channel.send(embed=embed, file = image, delete_after=60)
+		await message.delete()
 
 
 ### FUNZIONI ############################################################################################################
@@ -322,9 +344,10 @@ async def on_ready():
 	# await syncGogna()
 
 	bot.add_cog(MyCog(bot))
-	# bot.add_cog(BuonGiorno(bot))
+	bot.add_cog(Greeting(bot))
 	bot.add_cog(Reazioni(bot))
 	bot.add_cog(Traduttore(bot))
+	bot.add_cog(WhatAnime(bot))
 	# bot.add_cog(Domande(bot))
 
 	# myActivity = discord.Activity(name="musica natalizia", type=discord.ActivityType.listening)
@@ -492,6 +515,10 @@ async def bestemmia(ctx, arg=None, * ,best=None):
 @commands.check(is_alive)
 @commands.cooldown(1, 10, commands.BucketType.user)
 async def tag(ctx, user:discord.User=None):
+
+	if user == bot.user:
+		raise discord.ext.commands.BadArgument(f"Impossibile taggare {bot.user.mention}")	
+
 	if user==None:
 		user = random.choice(ctx.guild.members)
 
@@ -507,6 +534,9 @@ async def tag(ctx, user:discord.User=None):
 @commands.check(is_alive)
 @commands.cooldown(1, 10, commands.BucketType.user)
 async def stura(ctx, user:discord.User=None):
+	if user == bot.user:
+		raise discord.ext.commands.BadArgument(f"Impossibile sturare {bot.user.mention}")	
+
 	if user==None:
 		user = random.choice(ctx.guild.members)
 	response = f"{ctx.author.mention} sta sturando {user.mention}"
@@ -516,6 +546,8 @@ async def stura(ctx, user:discord.User=None):
 @bot.command(name='loda', help='Loda qualcuno (se non è specificato chi, prende Verbal)')
 @commands.check(is_alive)
 async def loda(ctx, user:discord.User=None):
+	if user == bot.user:
+		raise discord.ext.commands.BadArgument(f"Impossibile lodare {bot.user.mention}")	
 
 	if user == bot.get_user(621003460787175434):
 		raise discord.ext.commands.BadArgument(f"Impossibile lodare {user.mention}")
@@ -538,6 +570,8 @@ async def loda(ctx, user:discord.User=None):
 @bot.command(name='offendi', help='Offende qualcuno (se non è specificato chi, prende uno a AksJohn)', aliases=["insulta"])
 @commands.check(is_alive)
 async def offendi(ctx, user:discord.User=None):
+	if user == bot.user:
+		raise discord.ext.commands.BadArgument(f"Impossibile offendere {bot.user.mention}")	
 
 	offeseList = [
 		"MA VAFFANGUL A CHITEBBIV, CHITEMMURT E CHITESTRAMURT",
@@ -551,7 +585,34 @@ async def offendi(ctx, user:discord.User=None):
 		"To mare omo",
 		"Lesbico",
 		"Rincocitrullito",
-		"m'agg rutt u cazz"
+		"m'agg rutt u cazz",
+		"sei cosi brutto che quando tua madre ti ha fatto si è suicidata",
+		"il cesso è più bello di te",
+		"fai l'omm anche i merd fai l' omm",
+		"testa di clasper",
+		"SI' TE PIJO TE SDRUMO",
+		"TE DO 'N CARCIO AR CULO CHE TE CE LASCIO DENTRO 'A SCARPA",
+		"Sei come la minchia: sempre tra le palle",
+		"Sei così spaventoso che quando caghi la tua stessa merda dice di fotterti",
+		"sei un AksJohn",
+		"quando Dio diede l'intelligenza all'umanità tu dov'eri? Al cesso!?",
+		"hai un ego cosi' smisurato che non ti rimane piu' spazio nel cervello",
+		"hai un unico difetto: respiri",
+		"sei cosi ignorante che pure i tuo amici ti stanno lontano",
+		"sei utile quanto un uomo con una gamba sola a una gara di calci in culo",
+		"non ti ammazzo perché vorrebbe dire certificare la tua esistenza",
+		"perché non sei andato alle paraolimpiadi saresti arrivato primo fra i down",
+		"vali quanto un ebreo nel '45",
+		"prova a trattenere il respiro cinque minuti così tutti si accorgeranno che l'aria che respiriamo è migliorata",
+		"se rompesse il ghiaccio come rompe i coglioni, potrebbe diventare il re delle granite",
+		"se Dio ha creato l'ignoranza protesta, perchè ne sei l'unico beneficiario",
+		"sei talmente bruh che non ho abbastanza bruh per descriverti",
+		"gli animali capiscono senza parlare... tu parli senza capire",
+		"mi stai talmente sui maroni che anche insultarti non mi farebbe stare meglio",
+		"vedo che ti tieni in forma... c’hai il fisico di chi va tutti i giorni a fanculo, di corsa",
+		"è inutile che porti l'orologio se poi il tuo ritardo è mentale",
+		"mi fai arrapare il dito medio!",
+		"se sei intelligente lo nascondi molto bene"
 	]
 
 	if user==None:
@@ -614,16 +675,15 @@ async def kill(ctx, *args):
 						raise discord.InvalidArgument
 					else:
 						for membro in ruolo.members:
-							if membro not in KILLED: users.append(membro)
+							if membro == bot.user: raise discord.ext.commands.BadArgument(f"Impossibile uccidere {bot.user.mention}")	
+							elif membro not in KILLED: users.append(membro)
 							else: errorKiled.append(membro)
 				else:
 					if user not in ctx.guild.members: raise discord.ext.commands.BadArgument(f"L'utente {user.mention} non fa parte della gilda")
+					elif user == bot.user: raise discord.ext.commands.BadArgument(f"Impossibile uccidere {bot.user.mention}")	
 					elif user not in KILLED: 
 						membro = ctx.guild.get_member(user.id)
-						if membro.guild_permissions.administrator and ctx.guild.id == 754083217535008962: #se l'utente è nella gilda che mi hanno richiesto e vuolo uccedere gli amministratori...
-							users.append(ctx.author)
-						else:
-							users.append(user)	
+						users.append(user)	
 					else: errorKiled.append(user)
 
 		embedTXT = " ".join([x.mention for x in users])
@@ -780,7 +840,7 @@ async def quak(ctx, volte:int=0):
 	response = " ".join(paduruList)
 	await ctx.channel.send(response)
 
-@bot.command(name='baka', help='Scrive baka N volte')
+@bot.command(name='baka', help='Scrive baka a qualcuno')
 @commands.check(is_alive)
 async def baka(ctx, user:discord.User):
 
@@ -848,24 +908,20 @@ async def anime(ctx):
 	with open(pictDir + AnimePict, 'rb') as fp:
 		await ctx.channel.send(file=discord.File(fp, AnimePict), content=pictName)
 
-@bot.command(name='hentai', help='Invia hentai')
+@bot.command(name='hentai', help='Invia hentai (tags scive i tags più popolari)')
 @commands.check(is_alive)
 async def hentai(ctx, tag=""):
-
-	await ctx.message.delete()
 
 	params = {
 		'format':'json'
 	}
 
+	embed = None
+
 	warningEmbed = discord.Embed(
 		title="WARNING",
 		colour = discord.Colour.blurple()
 	)
-
-	tag = tag.replace(" ", "_").lower()
-
-	print("HENTAI")
 
 	channel = None
 	if not ctx.channel.is_nsfw():
@@ -874,15 +930,41 @@ async def hentai(ctx, tag=""):
 	else:
 		channel = ctx.channel
 
-	try:
-		res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params=params, timeout=3).json()
+	if tag == 'tags':
 
-		image = res["file_url"]
-	except Exception as e:
-		return
+		embed = discord.Embed(
+			title="TAGS POPOLARI",
+			colour = discord.Colour.blurple()
+		)
 
-	embed = discord.Embed()
-	embed.set_image(url=image)
+
+		res = requests.get(f'https://danbooru.donmai.us/tags?search[order]=count&limit=24', params=params, timeout=3).json()
+		response = " ".join([x["name"] for x in res])
+		ordinal = 1
+		for tag in res:
+			embed.add_field(name=f"{ordinal}° Posto", value=f"``{tag['name']}``", inline=True)
+			ordinal += 1
+		embed.add_field(name=f"({ordinal}° Posto)", value=f"``socks``", inline=True)
+		print(response)
+
+
+	else:	
+		await ctx.message.delete()
+
+		tag = tag.lower()
+
+		print("HENTAI")
+
+		try:
+			res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params=params, timeout=3).json()
+
+			image = res["file_url"]
+		except Exception as e:
+			return
+
+		embed = discord.Embed()
+		embed.set_image(url=image)
+
 	await channel.send(embed=embed)
 	
 	if not ctx.channel.is_nsfw():
