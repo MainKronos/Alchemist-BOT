@@ -14,7 +14,7 @@ import random
 from PIL import Image
 from io import BytesIO
 
-TOKEN = "NzgyMDAxODMxNTI5NDE0NzE2.X8F19Q.HddlThYdLQxJ3cActgU2UAuo0Ho"
+TOKEN = 
 KILLED = []
 
 startMSG = r"""
