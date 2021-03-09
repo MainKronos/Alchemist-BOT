@@ -1,3 +1,3 @@
 # Alchemist-BOT
 Discord BOT
-[ALCHEMIST]()
+[ALCHEMIST](./blob/master/docs/img/alchemy.png)
