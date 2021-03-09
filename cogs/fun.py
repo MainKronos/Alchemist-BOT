@@ -220,8 +220,6 @@ class fun(commands.Cog, name="fun"):
 		Invia hentai (tags scive i tags più popolari)
 		"""
 
-
-
 		params = {
 			'format':'json'
 		}
@@ -246,7 +244,6 @@ class fun(commands.Cog, name="fun"):
 				colour = discord.Colour.blurple()
 			)
 
-
 			res = requests.get(f'https://danbooru.donmai.us/tags?search[order]=count&limit=24', params=params, timeout=3).json()
 			response = " ".join([x["name"] for x in res])
 			ordinal = 1
@@ -254,14 +251,10 @@ class fun(commands.Cog, name="fun"):
 				embed.add_field(name=f"{ordinal}° Posto", value=f"``{tag['name']}``", inline=True)
 				ordinal += 1
 			embed.add_field(name=f"({ordinal}° Posto)", value=f"``socks``", inline=True)
-			print(response)
 		else:	
 			await ctx.message.delete()
 
 			tag = tag.lower().replace(" ", "_")
-
-			print("HENTAI")
-
 			try:
 				res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params=params, timeout=3).json()
 

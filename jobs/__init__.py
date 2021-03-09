@@ -2,7 +2,7 @@ import os
 # from importlib import import_module
 from jobs.bot import *
 from jobs.error import *
-from jobs import check, task
+from jobs import check, task, utils
 
 
 # Carica tutti i moduli in jobs

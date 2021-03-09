@@ -13,7 +13,8 @@ async def on_ready():
 	print(f"Python version: {platform.python_version()}")
 	print(f"Running on: {platform.system()} {platform.release()} ({os.name})")
 	print("-------------------")
-	load_cogs()
+	load_cogs() # Carica i cogs
+	utils.load_banned() # Carica gli tenti bannati
 
 	bot.loop.create_task(task.check_death_task())
 
@@ -39,15 +40,12 @@ def load_cogs():
 async def on_message(message):
 	ctx = await bot.get_context(message)
 
-
 	# Ignores if a command is being executed by a bot or by the bot itself
-	if message.author == bot.user or message.author.bot:
-		return
-	else:
-		if not check.is_banned(ctx):
-			if check.is_alive(ctx):
-				# Process the command if the user is not blacklisted
-				await bot.process_commands(message)
+	if message.author is bot.user: return
+	elif check.is_banned(ctx): return
+	elif check.is_alive(ctx):
+		await bot.process_commands(message)
+		# Process the command if the user is not blacklisted
 
 # The code in this event is executed every time a command has been *successfully* executed
 @bot.event

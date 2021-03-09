@@ -62,6 +62,10 @@ class moderation(commands.Cog, name="moderation"):
 		"""
 		Allerta un utente.
 		"""
+
+		if await self.bot.is_owner(member):
+			raise discord.ext.commands.BadArgument(f"Non è possibile warnare {member.mention}.")
+
 		reason = " ".join(args)
 		embed = discord.Embed(
 			title="User Warned!",

@@ -48,8 +48,9 @@ class rip(commands.Cog, name="rip"):
 		if member == self.bot.user:
 			raise discord.ext.commands.BadArgument(f"Non è possibile uccidere {member.mention}.")
 
-		if context.guild.id == 792523466040803368 and member.id == 173063242187276288:
-			raise discord.ext.commands.BadArgument(f"Non è possibile uccidere {member.mention}.")
+		if context.guild.id == 792523466040803368: # ⛩| Holy Quindecimᴵᵗᵃ
+			if await self.bot.is_owner(member):
+				raise discord.ext.commands.BadArgument(f"Non è possibile uccidere {member.mention}.")
 
 		if guild_id in config.KILLED and member_id in config.KILLED[guild_id]:
 			raise discord.ext.commands.BadArgument(f"L'utente {member.mention} è già morto.")

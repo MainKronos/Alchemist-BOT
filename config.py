@@ -4,4 +4,5 @@ import os
 BOT_PREFIX = (">")
 TOKEN = os.getenv('TOKEN')
 
-KILLED = {}
+KILLED = {} # Persone uccise
+BANNED = set() # Persone bannate

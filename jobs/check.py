@@ -23,8 +23,7 @@ def has_role(ctx): # Settaggi particolari per gilda
 	return True
 
 def is_banned(ctx):
-	banned = []
-	return ctx.message.author.id in banned
+	return ctx.message.author.id in config.BANNED
 
 ################################ OTHER ##################################
 

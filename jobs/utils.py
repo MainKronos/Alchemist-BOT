@@ -2,6 +2,7 @@ import asyncio, discord
 import config
 from datetime import datetime, timedelta
 from jobs.bot import bot
+import json
 
 async def check_death(): # Controlla se il tempo di attesa di tutte le persone morte è finito
 	member_chace = []
@@ -51,3 +52,14 @@ def check_death_member(guild_id, member_id): # Controlla se una persona è morta
 			"member_id": member_id,
 			"channel_id": channel_id
 		}
+
+### BANNATI ###
+
+def load_banned(): # Carica le persone bannate all'avvio
+	with open('json/banned.json', 'r') as f:
+		config.BANNED = set(json.loads(f.read()))
+
+def add_banned(ID): # aggiunge una persona bannata
+	config.BANNED.add(ID)
+	with open('json/banned.json', 'w') as f:
+		f.write(json.dumps(list(config.BANNED), indent='\t'))

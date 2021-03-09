@@ -42,8 +42,8 @@ async def on_command_error(ctx, error):
 		await ctx.channel.send(embed=embed, delete_after=10)
 		return
 
-	# try:
-	# 	embed.add_field(name=f"{ctx.author.name}", value=f"{error}", inline=False)
-	# 	await ctx.channel.send(embed=embed, delete_after=10)
-	# except Exception as e:
-	# 	pass
+	try:
+		embed.add_field(name=f"{ctx.author.name}", value=f"{error}", inline=False)
+		await ctx.channel.send(embed=embed, delete_after=10)
+	except Exception as e:
+		pass

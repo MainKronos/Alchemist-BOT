@@ -1,6 +1,6 @@
 import os, sys, discord
 from discord.ext import commands
-from jobs import check
+from jobs import check, utils
 import config
 
 class owner(commands.Cog, name="owner"):
@@ -22,6 +22,31 @@ class owner(commands.Cog, name="owner"):
 		self.bot.clear()
 		await self.bot.logout()
 		await self.bot.close()
+
+	@commands.group(name="end", invoke_without_command=True)
+	@commands.check(check.is_owner)
+	async def end(self, context, user:discord.User):
+		"""
+		Rimuove la possibilità ad un utente di usare il bot.
+		"""
+		utils.add_banned(user.id)
+
+		embed = discord.Embed(
+			title="THE END",
+			description=f"L'utente {user.mention} non potrà MAI più usare i comandi di {self.bot.user.mention}.",
+			color=0x212121
+		)
+		await context.send(embed=embed)
+
+	@end.command(name="list")
+	async def list(self, context):
+		embed = discord.Embed(
+			color=0x212121
+		)
+		ll = "\t".join([self.bot.get_user(m).mention for m in config.BANNED])
+		embed.add_field(name="THE END", value=f"{ll}", inline=False)
+		await context.send(embed=embed)
+
 
 	@commands.command(name="say", aliases=["echo"])
 	@commands.check(check.is_owner)
@@ -49,7 +74,7 @@ class owner(commands.Cog, name="owner"):
 	@commands.check(check.is_owner)
 	async def push(self, context, channel_id:int, *, args):
 		"""
-		Push
+		Invia un messaggio come embed al canale indicato.
 		"""
 
 		embed = discord.Embed(
