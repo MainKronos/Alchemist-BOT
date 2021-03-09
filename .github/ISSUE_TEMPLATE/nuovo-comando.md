@@ -7,8 +7,9 @@ assignees: ''
 
 ---
 
-# Comando
-`>comando`
+### Comando
+`>{inserire qui il comando}`
+_es. `>burn`_
 
-# Descrizione
-descrivi cosa dovrebbe fare il comando
+### Descrizione
+_Descrivi cosa dovrebbe fare il comando_
