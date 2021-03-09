@@ -1,2 +1,3 @@
 # Alchemist-BOT
-the Bullet Club discord bot
+Discord BOT
+[ALCHEMIST]()
