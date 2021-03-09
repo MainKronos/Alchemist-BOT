@@ -27,6 +27,7 @@ class MyHelpCommand(commands.DefaultHelpCommand):
 		for i in bot.cogs:
 			cog = bot.get_cog(i.lower())
 			commands = cog.get_commands()
+			if len(commands) == 0: continue
 			command_list = [command.name for command in commands]
 			command_description = [command.help for command in commands]
 			help_text = '\n'.join(f'{prefix}{n} - {h}' for n, h in zip(command_list, command_description))

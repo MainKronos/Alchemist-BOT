@@ -2,7 +2,7 @@ import os, sys, discord
 from discord.ext import commands
 from jobs import check
 import config
-import json, random
+import json, random, requests
 
 from PIL import Image
 from io import BytesIO
@@ -212,6 +212,73 @@ class fun(commands.Cog, name="fun"):
 
 		# burninate.save("burninate.png")
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.png"))
+
+	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
+	@commands.cooldown(1, 1, commands.BucketType.user)
+	async def hentai(self, ctx, *, tag=""):
+		"""
+		Invia hentai (tags scive i tags più popolari)
+		"""
+
+
+
+		params = {
+			'format':'json'
+		}
+
+		embed = None
+
+		warningEmbed = discord.Embed(
+			title="WARNING",
+			colour = discord.Colour.blurple()
+		)
+
+		channel = None
+		if not ctx.channel.is_nsfw():
+			channel = discord.utils.find(lambda channel: channel.is_nsfw(), ctx.guild.text_channels)
+			warningEmbed.add_field(name=f"Messaggi inviato in", value=f"{channel.mention}", inline=False)
+		else:
+			channel = ctx.channel
+
+		if tag == 'tags':
+			embed = discord.Embed(
+				title="TAGS POPOLARI",
+				colour = discord.Colour.blurple()
+			)
+
+
+			res = requests.get(f'https://danbooru.donmai.us/tags?search[order]=count&limit=24', params=params, timeout=3).json()
+			response = " ".join([x["name"] for x in res])
+			ordinal = 1
+			for tag in res:
+				embed.add_field(name=f"{ordinal}° Posto", value=f"``{tag['name']}``", inline=True)
+				ordinal += 1
+			embed.add_field(name=f"({ordinal}° Posto)", value=f"``socks``", inline=True)
+			print(response)
+		else:	
+			await ctx.message.delete()
+
+			tag = tag.lower().replace(" ", "_")
+
+			print("HENTAI")
+
+			try:
+				res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params=params, timeout=3).json()
+
+				image = res["file_url"]
+			except Exception as e:
+				print(e)
+				return
+
+			embed = discord.Embed()
+			embed.set_image(url=image)
+			text =  ", ".join([f"{x}" for x in res["tag_string"].split(' ')])
+			embed.set_footer(text=f"Tags: {text}")
+
+		await channel.send(embed=embed)
+		
+		if not ctx.channel.is_nsfw():
+			await ctx.channel.send(embed=warningEmbed)
 
 
 	# @bot.command(name='baka', help='Scrive baka a qualcuno', usage=r'>baka {USER}')
