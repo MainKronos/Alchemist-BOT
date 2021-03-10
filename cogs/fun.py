@@ -160,7 +160,7 @@ class fun(commands.Cog, name="fun"):
 		embed.add_field(name="Domanda", value=f"``{Quiz['domanda']}``", inline=False)
 		embed.add_field(name="Per", value=f"{user.mention}", inline=True)
 		embed.add_field(name="Penalità", value=f"**Morte**", inline=True)
-		embed.set_thumbnail(url="https://raw.githubusercontent.com/MainKronos/Bullet-Discord-BOT/master/OtherPict/quiz.png")
+		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/fun/quiz/quiz.png")
 
 		message = await channel.send(embed=embed)
 		await message.add_reaction('👍')
@@ -194,7 +194,7 @@ class fun(commands.Cog, name="fun"):
 		"""
 		Brucia sul rogo qualcuno.
 		"""
-		burnfile=r"./img/burn/fire.png"
+		burnfile=r"./img/fun/burn/fire.png"
 		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
 
 
