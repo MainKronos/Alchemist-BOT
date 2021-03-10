@@ -87,7 +87,7 @@ class fun(commands.Cog, name="fun"):
 		embed.set_footer(
 			text=f"Domanda richiesta da: {context.message.author}"
 		)
-		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/fun/8ball/magic-ball.png")
+		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/fun/8ball/8ball.png")
 		await context.send(embed=embed)
 
 	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
