@@ -53,6 +53,27 @@ class feeling(commands.Cog, name="feeling"):
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)
 
+	@ex.command(name="lick")
+	async def lick(self, ctx, user:discord.User):
+		"""
+		Lecca qualcuno.
+		"""
+		thisDir = "lick"
+
+		localDir = f"{self.localFolder}/{thisDir}"
+		image = random.choice(os.listdir(localDir))
+
+		embed = discord.Embed(
+			title="FEELING",
+			description=f'{user.mention}, mlml!',
+			color=0xff758c
+		)
+
+		url = f"{self.gitFolder}/{thisDir}/{image}"
+		embed.set_image(url=url)
+		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+		await ctx.channel.send(embed=embed)
+
 	@ex.command(name="pat")
 	async def pat(self, ctx, user:discord.User):
 		"""
