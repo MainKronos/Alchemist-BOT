@@ -59,7 +59,10 @@ class feeling(commands.Cog, name="feeling"):
 			description=f'{user.mention}, BAKA!',
 			color=0xff758c
 		)
-		embed.set_image(url=f"{self.gitFolder}/{thisDir}/{AnimePict}")
+
+		url = f"{self.gitFolder}/{thisDir}/{AnimePict}"
+		print(url)
+		embed.set_image(url=url)
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 
 		await ctx.channel.send(embed=embed)

@@ -63,7 +63,7 @@ class fun(commands.Cog, name="fun"):
 			description=f"**{ctx.message.author.name}** sta sturando **{user.name}**"
 		)
 
-		embed.set_thumbnail(url="https://raw.githubusercontent.com/MainKronos/Bullet-Discord-BOT/master/OtherPict/stura.gif")
+		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/fun/stura/stura.gif")
 
 		print(f"{ctx.author.name} sta sturando {user.name}")
 		await ctx.channel.send(embed=embed)
