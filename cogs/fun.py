@@ -273,22 +273,5 @@ class fun(commands.Cog, name="fun"):
 		if not ctx.channel.is_nsfw():
 			await ctx.channel.send(embed=warningEmbed)
 
-
-	# @bot.command(name='baka', help='Scrive baka a qualcuno', usage=r'>baka {USER}')
-	# @commands.check(is_alive)
-	# async def baka(ctx, user:discord.User):
-
-	# 	pictDir = "./BakaPict/"
-	# 	images = os.listdir(pictDir)
-	# 	AnimePict = [x for x in images if x.split('.')[0]==f'{user.id}']
-	# 	if len(AnimePict)  == 0:
-	# 		AnimePict = 'default.gif'
-	# 		# raise discord.ext.commands.BadArgument("Utente non implementato") 
-	# 	else:
-	# 		AnimePict = AnimePict[0]
-
-	# 	with open(pictDir + AnimePict, 'rb') as fp:
-	# 		await ctx.channel.send(file=discord.File(fp, AnimePict), content=user.name)
-
 def setup(bot):
 	bot.add_cog(fun(bot))

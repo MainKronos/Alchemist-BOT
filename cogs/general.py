@@ -133,18 +133,18 @@ class general(commands.Cog, name="general"):
 		"""
 		Chiedi qualsiasi cosa al BOT.
 		"""
-		answers = ['It is certain.', 'It is decidedly so.', 'You may rely on it.', 'Without a doubt.',
-				   'Yes - definitely.', 'As I see, yes.', 'Most likely.', 'Outlook good.', 'Yes.',
-				   'Signs point to yes.', 'Reply hazy, try again.', 'Ask again later.', 'Better not tell you now.',
-				   'Cannot predict now.', 'Concentrate and ask again later.', 'Don\'t count on it.', 'My reply is no.',
-				   'My sources say no.', 'Outlook not so good.', 'Very doubtful.']
+		answers = ['È certo.', 'È decisamente così.', 'Ci puoi scommettere!.', 'Senza dubbio.',
+				   'Sì, sicuramente.', 'Da quel che vedo, si.', 'Probabilmente si.', 'Parebbe di si.', 'Si.',
+				   'Le carte mi indicano sì.', 'Risposta confusa, riprova.', 'Riprova più tardi.', 'Meglio che non te lo dica.',
+				   'Non posso risponderti ora come ora.', 'Concentrati e chiedi di nuovo più tardi.', 'Non contarci.', 'La mia risposta è no.',
+				   'Le mie fonti dicono di no.', 'Parebbe di no.', 'Sono molto dubbioso.']
 		embed = discord.Embed(
-			title="**My Answer:**",
+			title="**La mia risposta:**",
 			description=f"{answers[random.randint(0, len(answers))]}",
 			color=0x00FF00
 		)
 		embed.set_footer(
-			text=f"Question asked by: {context.message.author}"
+			text=f"Domanda richiesta da: {context.message.author}"
 		)
 		await context.send(embed=embed)
 
