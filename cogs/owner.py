@@ -44,6 +44,7 @@ class owner(commands.Cog, name="owner"):
 			color=0x212121
 		)
 		ll = "\t".join([self.bot.get_user(m).mention for m in config.BANNED])
+		if len(ll) == 0: ll = f"A nessun utente è stata tolta la possibilità di usare {self.bot.user.mention}."
 		embed.add_field(name="THE END", value=f"{ll}", inline=False)
 		await context.send(embed=embed)
 
