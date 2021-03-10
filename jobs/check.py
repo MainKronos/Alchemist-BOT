@@ -28,8 +28,8 @@ def is_banned(ctx):
 ################################ OTHER ##################################
 
 def need_censura(ctx):
-	if is_admin(ctx):
-		return False
+	# if is_admin(ctx):
+	# 	return False
 
 	if ctx.guild.id == 792523466040803368: # ⛩| Holy Quindecimᴵᵗᵃ
 		whitelist = [781533713267163156] # SCIPOLA
