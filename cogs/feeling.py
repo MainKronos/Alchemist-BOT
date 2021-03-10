@@ -36,10 +36,26 @@ class feeling(commands.Cog, name="feeling"):
 	# async def ex1(self, context):
 	# 	pass
 
-	# @ex.command(name="ex2")
-	# async def ex2(self, context):
-	# 	pass
+	@ex.command(name="hug")
+	async def hug(self, context, user:discord.User):
+		"""
+		Invia un abbraccio a qualcuno.
+		"""
+		thisDir = "hug"
 
+		localDir = f"{self.localFolder}/{thisDir}"
+		image = random.choice(os.listdir(localDir))
+
+		embed = discord.Embed(
+			title="FEELING",
+			description=f'{user.mention}, 🫂❤️',
+			color=0xff758c
+		)
+
+		url = f"{self.gitFolder}/{thisDir}/{image}"
+		embed.set_image(url=url)
+		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+		await ctx.channel.send(embed=embed)
 
 	@ex.command(name='baka')
 	async def baka(self, ctx, user:discord.User):
@@ -61,10 +77,8 @@ class feeling(commands.Cog, name="feeling"):
 		)
 
 		url = f"{self.gitFolder}/{thisDir}/{AnimePict}"
-		print(url)
 		embed.set_image(url=url)
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
-
 		await ctx.channel.send(embed=embed)
 
 def setup(bot):
