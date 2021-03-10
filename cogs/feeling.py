@@ -37,7 +37,7 @@ class feeling(commands.Cog, name="feeling"):
 	# 	pass
 
 	@ex.command(name="hug")
-	async def hug(self, context, user:discord.User):
+	async def hug(self, ctx, user:discord.User):
 		"""
 		Invia un abbraccio a qualcuno.
 		"""
