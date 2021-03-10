@@ -74,6 +74,27 @@ class feeling(commands.Cog, name="feeling"):
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)
 
+	@ex.command(name="slap")
+	async def slap(self, ctx, user:discord.User):
+		"""
+		Schiaffeggia qualcuno.
+		"""
+		thisDir = "slap"
+
+		localDir = f"{self.localFolder}/{thisDir}"
+		image = random.choice(os.listdir(localDir))
+
+		embed = discord.Embed(
+			title="FEELING",
+			description=f'{user.mention}, ☹️.',
+			color=0xff758c
+		)
+
+		url = f"{self.gitFolder}/{thisDir}/{image}"
+		embed.set_image(url=url)
+		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+		await ctx.channel.send(embed=embed)
+
 	@ex.command(name="hug")
 	async def hug(self, ctx, user:discord.User):
 		"""
