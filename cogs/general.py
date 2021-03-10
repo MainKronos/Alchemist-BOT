@@ -128,25 +128,5 @@ class general(commands.Cog, name="general"):
 		await embed_message.add_reaction("👎")
 		await embed_message.add_reaction("🤷")
 
-	@commands.command(name="8ball")
-	async def eight_ball(self, context, *args):
-		"""
-		Chiedi qualsiasi cosa al BOT.
-		"""
-		answers = ['È certo.', 'È decisamente così.', 'Ci puoi scommettere!.', 'Senza dubbio.',
-				   'Sì, sicuramente.', 'Da quel che vedo, si.', 'Probabilmente si.', 'Parebbe di si.', 'Si.',
-				   'Le carte mi indicano sì.', 'Risposta confusa, riprova.', 'Riprova più tardi.', 'Meglio che non te lo dica.',
-				   'Non posso risponderti ora come ora.', 'Concentrati e chiedi di nuovo più tardi.', 'Non contarci.', 'La mia risposta è no.',
-				   'Le mie fonti dicono di no.', 'Parebbe di no.', 'Sono molto dubbioso.']
-		embed = discord.Embed(
-			title="**La mia risposta:**",
-			description=f"{answers[random.randint(0, len(answers))]}",
-			color=0x00FF00
-		)
-		embed.set_footer(
-			text=f"Domanda richiesta da: {context.message.author}"
-		)
-		await context.send(embed=embed)
-
 def setup(bot):
 	bot.add_cog(general(bot))

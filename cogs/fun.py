@@ -68,6 +68,28 @@ class fun(commands.Cog, name="fun"):
 		print(f"{ctx.author.name} sta sturando {user.name}")
 		await ctx.channel.send(embed=embed)
 
+	@commands.command(name="8ball")
+	async def eight_ball(self, context, *, args):
+		"""
+		Chiedi qualsiasi cosa al BOT.
+		"""
+		answers = ['È certo.', 'È decisamente così.', 'Ci puoi scommettere!.', 'Senza dubbio.',
+				   'Sì, sicuramente.', 'Da quel che vedo, si.', 'Probabilmente si.', 'Parebbe di si.', 'Si.',
+				   'Le carte mi indicano sì.', 'Risposta confusa, riprova.', 'Riprova più tardi.', 'Meglio che non te lo dica.',
+				   'Non posso risponderti ora come ora.', 'Concentrati e chiedi di nuovo più tardi.', 'Non contarci.', 'La mia risposta è no.',
+				   'Le mie fonti dicono di no.', 'Parebbe di no.', 'Sono molto dubbioso.']
+		embed = discord.Embed(
+			title="**La mia risposta:**",
+			description=f"{random.choice(answers)}",
+			color=0x00FF00
+		)
+		embed.add_field(name=f"Alla domanda:", value=f"{args}", inline=False)
+		embed.set_footer(
+			text=f"Domanda richiesta da: {context.message.author}"
+		)
+		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/fun/8ball/magic-ball.png")
+		await context.send(embed=embed)
+
 	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
 	# @commands.cooldown(1, 1, commands.BucketType.user)
 	async def hentai(self, ctx, *, tag=""):
@@ -189,7 +211,6 @@ class fun(commands.Cog, name="fun"):
 			await ctx.channel.send(user.mention)
 
 	@commands.command(name='burn', usage=r'>burn {USER}')
-	@commands.check(check.has_role)
 	async def burn(self, ctx, user:discord.User):
 		"""
 		Brucia sul rogo qualcuno.
