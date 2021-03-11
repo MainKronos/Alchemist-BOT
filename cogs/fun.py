@@ -130,8 +130,6 @@ class fun(commands.Cog, name="fun"):
 				embed.add_field(name=f"{ordinal}° Posto", value=f"``{tag['name']}``", inline=True)
 				ordinal += 1
 			embed.add_field(name=f"({ordinal}° Posto)", value=f"``socks``", inline=True)
-			print(response)
-
 
 		else:	
 			await ctx.message.delete()

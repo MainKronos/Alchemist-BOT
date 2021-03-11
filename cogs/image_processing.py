@@ -5,9 +5,10 @@ import config
 import json, random, requests
 
 from PIL import *
-from PIL import ImageFilter
+from PIL import ImageFilter, ImageDraw 
 from io import BytesIO
 
+# @commands.cooldown(1, 600, commands.BucketType.category)
 
 class image_processing(commands.Cog, name="image processing"):
 	def __init__(self, bot):
@@ -39,6 +40,7 @@ class image_processing(commands.Cog, name="image processing"):
 		await context.send(embed=embed)
 
 	@im.command(name='burn')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
 	async def burn(self, ctx, user:discord.User):
 		"""
 		Brucia sul rogo qualcuno.
@@ -65,6 +67,7 @@ class image_processing(commands.Cog, name="image processing"):
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.png"))
 
 	@im.command(name='trash')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
 	async def trash(self, ctx, user:discord.User):
 		"""
 		Trash
@@ -90,6 +93,7 @@ class image_processing(commands.Cog, name="image processing"):
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="trash.png"))
 
 	@im.command(name='delete')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
 	async def delete(self, ctx, user:discord.User):
 		"""
 		delete
@@ -114,6 +118,7 @@ class image_processing(commands.Cog, name="image processing"):
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="delete.png"))
 
 	@im.command(name='hitler')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
 	async def hitler(self, ctx, user:discord.User):
 		"""
 		hitler
@@ -136,6 +141,159 @@ class image_processing(commands.Cog, name="image processing"):
 		final_buffer.seek(0)
 
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="hitler.png"))
+
+	@im.command(name='rip')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def rip(self, ctx, user:discord.User):
+		"""
+		rip
+		"""
+
+		process_img = "rip.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		mask = Image.new("RGBA", (720, 405), 0)
+
+		avatar = avatar.resize((85, 85))
+		mask.paste(avatar, (110, 47))
+
+		process_img = Image.alpha_composite(mask, process_img)
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="rip.png"))
+
+	@im.command(name='facepalm')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def facepalm(self, ctx, user:discord.User):
+		"""
+		facepalm
+		"""
+
+		process_img = "facepalm.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		mask = Image.new("RGBA", (632, 357), 0)
+
+		avatar = avatar.resize((255, 255)).crop((10, 10, 245, 245))
+		mask.paste(avatar, (199, 112))
+
+		process_img = Image.alpha_composite(mask, process_img)
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="facepalm.png"))
+
+	@im.command(name='kiss')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def kiss(self, ctx, user1:discord.User, user2:discord.User):
+		"""
+		kiss
+		"""
+
+		process_img = "kiss.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes1 = await user1.avatar_url_as(format="png", size=1024).read()
+		avatar_bytes2 = await user2.avatar_url_as(format="png", size=1024).read()
+
+		avatar1 = Image.open(BytesIO(avatar_bytes1)).convert("RGBA")
+		avatar2 = Image.open(BytesIO(avatar_bytes2)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		mask = Image.new("L", (200, 200), 0)
+
+		draw = ImageDraw.Draw(mask)
+		draw.ellipse((0, 0, 200, 200), fill=255)
+
+		avatar1 = avatar1.resize((200, 200))
+		avatar2 = avatar2.resize((200, 200))
+
+		process_img.paste(avatar1, (150, 25), mask)
+		process_img.paste(avatar2, (350, 25), mask)
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="kiss.png"))
+
+	@im.command(name='spank')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def spank(self, ctx, user1:discord.User, user2:discord.User):
+		"""
+		spank
+		"""
+
+		process_img = "spank.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes1 = await user1.avatar_url_as(format="png", size=1024).read()
+		avatar_bytes2 = await user2.avatar_url_as(format="png", size=1024).read()
+
+		avatar1 = Image.open(BytesIO(avatar_bytes1)).convert("RGBA")
+		avatar2 = Image.open(BytesIO(avatar_bytes2)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		mask = Image.new("L", (140, 140), 0)
+
+		draw = ImageDraw.Draw(mask)
+		draw.ellipse((0, 0, 140, 140), fill=255)
+
+		avatar1 = avatar1.resize((140, 140))
+		avatar2 = avatar2.resize((140, 140))
+
+		process_img.paste(avatar1, (350, 220), mask)
+		process_img.paste(avatar2, (225, 5), mask)
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="spank.png"))
+
+	@im.command(name='leader')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def leader(self, ctx, user:discord.User):
+		"""
+		leader
+		"""
+
+		process_img = "leader.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		mask = Image.new("RGBA", (600, 539), 0)
+
+		avatar = avatar.resize((135, 135))
+		mask.paste(avatar, (350, 20))
+
+		process_img = Image.alpha_composite(mask, process_img)
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="leader.png"))
+
 
 def setup(bot):
 	bot.add_cog(image_processing(bot))
