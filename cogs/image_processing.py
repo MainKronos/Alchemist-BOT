@@ -89,5 +89,29 @@ class image_processing(commands.Cog, name="image processing"):
 
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="trash.png"))
 
+	@im.command(name='delete')
+	async def delete(self, ctx, user:discord.User):
+		"""
+		delete
+		"""
+
+		process_img = "delete.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		avatar = avatar.resize((195, 195))
+
+		process_img.paste(avatar, (120, 135))
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="trash.png"))
+
 def setup(bot):
 	bot.add_cog(image_processing(bot))
