@@ -5,6 +5,7 @@ import config
 import json, random, requests
 
 from PIL import *
+from PIL import ImageFilter
 from io import BytesIO
 
 
@@ -66,7 +67,7 @@ class image_processing(commands.Cog, name="image processing"):
 	@im.command(name='trash')
 	async def trash(self, ctx, user:discord.User):
 		"""
-		Trash~
+		Trash
 		"""
 
 		process_img = "trash.png"
@@ -75,12 +76,12 @@ class image_processing(commands.Cog, name="image processing"):
 		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
 
 		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
-		process_img = Image.open(process_img).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
 
 		avatar = avatar.resize((309, 309))
 		avatar = avatar.filter(ImageFilter.BLUR)
 
-		process_img = process_img.paste(avatar, (309, 0))
+		process_img.paste(avatar, (309, 0))
 
 		final_buffer = BytesIO()
 		process_img.save(final_buffer, "png")
