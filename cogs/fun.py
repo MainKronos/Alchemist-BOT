@@ -210,30 +210,6 @@ class fun(commands.Cog, name="fun"):
 		for x in range(5):
 			await ctx.channel.send(user.mention)
 
-	@commands.command(name='burn', usage=r'>burn {USER}')
-	async def burn(self, ctx, user:discord.User):
-		"""
-		Brucia sul rogo qualcuno.
-		"""
-		burnfile=r"./img/fun/burn/fire.png"
-		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
-
-
-		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
-		fire = Image.open(burnfile).convert("RGBA")
-
-		avatar = avatar.resize((500, 500))
-		fire = fire.resize((500, 500))
-
-		burninate = Image.blend(avatar, fire, alpha=0.7)
-
-		final_buffer = BytesIO()
-		burninate.save(final_buffer, "png")
-		final_buffer.seek(0)
-
-		# burninate.save("burninate.png")
-		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.png"))
-
 	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
 	@commands.cooldown(1, 1, commands.BucketType.user)
 	async def hentai(self, ctx, *, tag=""):
