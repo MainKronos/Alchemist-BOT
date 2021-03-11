@@ -4,11 +4,13 @@ from jobs import check
 import config
 import json, random, requests
 
+from PIL import Image
+from io import BytesIO
+
 
 class image_processing(commands.Cog, name="image processing"):
 	def __init__(self, bot):
 		self.bot = bot
-		self.gitFolder = f"{config.GIT_FOLDER}/image_processing"
 		self.localFolder = "./img/image_processing"
 
 	@commands.group(name="im", invoke_without_command=True)
