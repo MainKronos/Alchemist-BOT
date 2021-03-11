@@ -111,7 +111,31 @@ class image_processing(commands.Cog, name="image processing"):
 		process_img.save(final_buffer, "png")
 		final_buffer.seek(0)
 
-		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="trash.png"))
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="delete.png"))
+
+	@im.command(name='hitler')
+	async def hitler(self, ctx, user:discord.User):
+		"""
+		hitler
+		"""
+
+		process_img = "hitler.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		avatar = avatar.resize((140, 140))
+
+		process_img.paste(avatar, (46, 43))
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="hitler.png"))
 
 def setup(bot):
 	bot.add_cog(image_processing(bot))
