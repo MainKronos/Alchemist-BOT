@@ -110,6 +110,7 @@ class general(commands.Cog, name="general"):
 		await context.send(embed=embed)
 
 	@commands.command(name="poll")
+	@commands.cooldown(1, 5, commands.BucketType.guild)
 	async def poll(self, context, *args):
 		"""
 		Crea una poll dove i mambri possono votare.

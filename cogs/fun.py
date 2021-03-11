@@ -69,6 +69,7 @@ class fun(commands.Cog, name="fun"):
 		await ctx.channel.send(embed=embed)
 
 	@commands.command(name="8ball")
+	@commands.cooldown(1, 5, commands.BucketType.guild)
 	async def eight_ball(self, context, *, args):
 		"""
 		Chiedi qualsiasi cosa al BOT.
