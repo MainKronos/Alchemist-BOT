@@ -232,6 +232,46 @@ class image_processing(commands.Cog, name="image processing"):
 
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="kiss.png"))
 
+	@im.command(name='bed')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def bed(self, ctx, user1:discord.User, user2:discord.User):
+		"""
+		bed
+		"""
+
+		process_img = "bed.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes1 = await user1.avatar_url_as(format="png", size=1024).read()
+		avatar_bytes2 = await user2.avatar_url_as(format="png", size=1024).read()
+
+		avatar1 = Image.open(BytesIO(avatar_bytes1)).convert("RGBA")
+		avatar2 = Image.open(BytesIO(avatar_bytes2)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		mask1 = Image.new("L", (100, 100), 0)
+		mask2 = Image.new("L", (70, 70), 0)
+
+		draw = ImageDraw.Draw(mask1)
+		draw.ellipse((0, 0, 100, 100), fill=255)
+		draw = ImageDraw.Draw(mask2)
+		draw.ellipse((0, 0, 70, 70), fill=255)
+
+		avatar1 = avatar1.resize((100, 100))
+		avatar1_2 = avatar1.resize((70, 70))
+		avatar2 = avatar2.resize((70, 70))
+
+		process_img.paste(avatar1, (25, 100), mask1)
+		process_img.paste(avatar1, (25, 300), mask1)
+		process_img.paste(avatar1_2, (53, 450), mask2)
+		process_img.paste(avatar2, (53, 575), mask2)
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="bed.png"))
+
 	@im.command(name='spank')
 	@commands.cooldown(1, 2, commands.BucketType.guild)
 	async def spank(self, ctx, user1:discord.User, user2:discord.User):
@@ -294,6 +334,59 @@ class image_processing(commands.Cog, name="image processing"):
 
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="leader.png"))
 
+	@im.command(name='affect')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def affect(self, ctx, user:discord.User):
+		"""
+		affect
+		"""
+
+		process_img = "affect.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		avatar = avatar.resize((200, 200)).crop((0, 21.5, 200, 178.5))
+
+		process_img.paste(avatar, (180, 383))
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="affect.png"))
+
+	@im.command(name='beautiful')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def beautiful(self, ctx, user:discord.User):
+		"""
+		beautiful
+		"""
+
+		process_img = "beautiful.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA").copy()
+
+		mask = Image.new("RGBA", (376, 400), 0)
+
+		avatar = avatar.resize((95, 95))
+		mask.paste(avatar, (258, 28))
+		mask.paste(avatar, (258, 229))
+
+		process_img = Image.alpha_composite(mask, process_img)
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="beautiful.png"))
 
 def setup(bot):
 	bot.add_cog(image_processing(bot))
