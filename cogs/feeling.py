@@ -11,13 +11,13 @@ class feeling(commands.Cog, name="feeling"):
 		self.gitFolder = f"{config.GIT_FOLDER}/feeling"
 		self.localFolder = "./img/feeling"
 
-	@commands.group(name="ex", invoke_without_command=True)
-	async def ex(self, context):
+	@commands.group(name="fe", invoke_without_command=True)
+	async def fe(self, context):
 		"""
 		Invia la lista dei subcomandi per le azioni/sentimenti.
 		"""
 
-		exCommand = self.bot.get_command("ex") # Questo comando
+		exCommand = self.bot.get_command("fe") # Questo comando
 		subcommands = [sub for sub in self.bot.walk_commands() if sub.parent == exCommand]
 
 		sub_list = [sub.name for sub in subcommands]
@@ -32,7 +32,7 @@ class feeling(commands.Cog, name="feeling"):
 		)
 		await context.send(embed=embed)
 
-	@ex.command(name="kiss")
+	@fe.command(name="kiss")
 	async def kiss(self, ctx, user:discord.User):
 		"""
 		Bacia qualcuno.
@@ -53,7 +53,7 @@ class feeling(commands.Cog, name="feeling"):
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)
 
-	@ex.command(name="lick")
+	@fe.command(name="lick")
 	async def lick(self, ctx, user:discord.User):
 		"""
 		Lecca qualcuno.
@@ -74,7 +74,7 @@ class feeling(commands.Cog, name="feeling"):
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)
 
-	@ex.command(name="pat")
+	@fe.command(name="pat")
 	async def pat(self, ctx, user:discord.User):
 		"""
 		Fai pat pat a qualcuno.
@@ -95,7 +95,7 @@ class feeling(commands.Cog, name="feeling"):
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)
 
-	@ex.command(name="slap")
+	@fe.command(name="slap")
 	async def slap(self, ctx, user:discord.User):
 		"""
 		Schiaffeggia qualcuno.
@@ -116,7 +116,7 @@ class feeling(commands.Cog, name="feeling"):
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)
 
-	@ex.command(name="hug")
+	@fe.command(name="hug")
 	async def hug(self, ctx, user:discord.User):
 		"""
 		Abbraccia qualcuno.
@@ -137,7 +137,7 @@ class feeling(commands.Cog, name="feeling"):
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)
 
-	@ex.command(name='baka')
+	@fe.command(name='baka')
 	async def baka(self, ctx, user:discord.User):
 		"""
 		Invia un baka a qualcuno.
