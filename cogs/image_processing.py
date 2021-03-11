@@ -4,7 +4,7 @@ from jobs import check
 import config
 import json, random, requests
 
-from PIL import Image
+from PIL import *
 from io import BytesIO
 
 
@@ -12,6 +12,9 @@ class image_processing(commands.Cog, name="image processing"):
 	def __init__(self, bot):
 		self.bot = bot
 		self.localFolder = "./img/image_processing"
+
+
+
 
 	@commands.group(name="im", invoke_without_command=True)
 	async def im(self, context):
@@ -58,8 +61,32 @@ class image_processing(commands.Cog, name="image processing"):
 		burninate.save(final_buffer, "png")
 		final_buffer.seek(0)
 
-		# burninate.save("burninate.png")
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.png"))
+
+	@im.command(name='trash')
+	async def trash(self, ctx, user:discord.User):
+		"""
+		Trash~
+		"""
+
+		process_img = "trash.png"
+		process_img=f"{self.localFolder}/{process_img}"
+
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		process_img = Image.open(process_img).convert("RGBA")
+
+		avatar = avatar.resize((309, 309))
+		avatar = avatar.filter(ImageFilter.BLUR)
+
+		process_img = process_img.paste(avatar, (309, 0))
+
+		final_buffer = BytesIO()
+		process_img.save(final_buffer, "png")
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="trash.png"))
 
 def setup(bot):
 	bot.add_cog(image_processing(bot))
