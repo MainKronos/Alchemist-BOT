@@ -129,5 +129,29 @@ class rip(commands.Cog, name="rip"):
 		# embed.set_thumbnail(url="https://media.tenor.com/images/096adb7ce60f35aa4d2ceb4243de0530/tenor.gif")
 		await context.channel.send(embed=embed)
 
+	@commands.command(name='killedit', aliases=['kedit', 'ked'])
+	@commands.check(check.is_owner)
+	async def killedit(self, context, member:discord.User, delta:int, guild_id:int=None):
+		"""
+		Modifica una morte.
+		"""
+
+		if guild_id==None:
+			guild_id = context.guild.id
+		member_id = member.id
+
+
+		if guild_id not in config.KILLED or member_id not in config.KILLED[guild_id]:
+			raise discord.ext.commands.BadArgument(f"L'utente non {member.mention} è morto.")
+
+		config.KILLED[guild_id][member_id]["delta"]=timedelta(minutes=delta)
+
+		embed = discord.Embed(
+			colour = discord.Colour.teal()
+		)
+		embed.add_field(name="killedit", value=f"Il tempo di morte dell'utente {member.mention} è stato modificato a {delta*60} secondi.", inline=False)
+		# embed.set_thumbnail(url="https://media.tenor.com/images/096adb7ce60f35aa4d2ceb4243de0530/tenor.gif")
+		await context.channel.send(embed=embed)
+
 def setup(bot):
 	bot.add_cog(rip(bot))
