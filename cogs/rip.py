@@ -109,8 +109,8 @@ class rip(commands.Cog, name="rip"):
 		Fà risorgere una vita al prezzo di una vita.
 		"""
 
-		# if sacrifice == None: sacrifice = context.message.author
-		sacrifice = context.message.author
+		if sacrifice == None: sacrifice = context.message.author
+		if not check.is_owner(context): sacrifice = context.message.author 
 
 		guild_id = context.guild.id
 		member_id = member.id
@@ -130,7 +130,7 @@ class rip(commands.Cog, name="rip"):
 		await context.channel.send(embed=embed)
 
 	@commands.command(name='killedit', aliases=['kedit', 'ked'])
-	@commands.check(check.is_owner)
+	@commands.check(check.is_admin)
 	async def killedit(self, context, member:discord.User, delta:int, guild_id:int=None):
 		"""
 		Modifica una morte.
