@@ -114,9 +114,36 @@ class hospitality(commands.Cog, name="hospitality"): # hospitality
 			embed = self.get_embed(now)
 			await self.channel.send(embed=embed)
 
-			
+
+class MessageControl(commands.Cog, name="MessageControl"): # MessageControl
+	def __init__(self, bot):
+		self.bot = bot		
+
+	async def getData(self, guild):
+		tempo = datetime.now() - timedelta(seconds=10)
+
+		async for entry in guild.audit_logs(action=discord.AuditLogAction.message_delete, oldest_first=False, limit=1):
+			# print('{0.user} ha cancellato il messaggio di {0.target}'.format(entry))
+			# return "{0.user}".format(entry)
+			return entry.user
+
+	@commands.Cog.listener()
+	async def on_message_delete(self, message):
+
+		if message.author == self.bot.user:
+
+			user = await self.getData(message.guild)
+
+			if user != self.bot.user:
+
+				ctx = await self.bot.get_context(message)
+				txt = f"Hai eliminato un messaggio di {self.bot.user.mention}."
+
+				await self.bot.get_command('warn').callback(self, ctx, user, txt)
+				# await message.channel.send(user)
 
 
 def setup(bot):
 	bot.add_cog(manga(bot))
 	bot.add_cog(hospitality(bot))
+	bot.add_cog(MessageControl(bot))

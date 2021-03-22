@@ -26,6 +26,7 @@ class MyHelpCommand(commands.DefaultHelpCommand):
 		prefix = config.BOT_PREFIX[0]
 		for i in bot.cogs:
 			cog = bot.get_cog(i.lower())
+			if cog == None: continue
 			commands = cog.get_commands()
 			if len(commands) == 0: continue
 			command_list = [command.name for command in commands]
