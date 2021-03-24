@@ -1,9 +1,7 @@
 import os, sys, discord, platform, random, aiohttp, json
 from discord.ext import commands
-if not os.path.isfile("config.py"):
-	sys.exit("'config.py' not found! Please add it and try again.")
-else:
-	import config
+import config
+from jobs import check, utils
 
 class general(commands.Cog, name="general"):
 	def __init__(self, bot):
@@ -143,20 +141,24 @@ class general(commands.Cog, name="general"):
 		embed = discord.Embed(
 			title="SPEGNIMENTO MANUALE",
 			colour=discord.Colour.dark_grey(),
-			description=f"Per completare lo spegnimento manuale sono necessari {NumeroAdmin} 👍 da parte di {NumeroAdmin} amministratori entro {TempoLimite} secondi.\nLo dopo lo spegnimento non sarà più possibile riaccendere il bot."
+			description=f"Per completare lo spegnimento manuale sono necessari {NumeroAdmin} 👍 da parte di {NumeroAdmin} amministratori entro {TempoLimite} secondi.\nDopo lo spegnimento non sarà più possibile riaccendere il bot."
 		)
-		embed.set_image(url=f"{config.GIT_FOLDER}/general/mclose/power.png")
+		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/general/mclose/power.png")
 
-		message = await channel.send(embed=embed)
+		message = await context.send(embed=embed)
 		await message.add_reaction('👍')
 
 		def check(reaction, userx):
-			return reaction.message == message and userc.guild_permissions.administrator and str(reaction.emoji) == '👍'
+			if reaction.message == message:
+				if userx.guild_permissions.administrator:
+					if str(reaction.emoji) == '👍':
+						if reaction.count == NumeroAdmin+1:
+							return True
 
 		try:
-			for x in range(NumeroAdmin):
-				await self.bot.wait_for('reaction_add', timeout=TempoLimite, check=check)
-		except Exception:
+			await self.bot.wait_for('reaction_add', timeout=TempoLimite, check=check)
+		except Exception as e:
+			print(e)
 			raise discord.ext.commands.CommandError("Spegnimento Manuale fallito.")
 		else:
 			await self.bot.get_command('close').callback(self, context)
