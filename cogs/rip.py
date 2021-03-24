@@ -38,15 +38,20 @@ class rip(commands.Cog, name="rip"):
 		"""
 		Uccide un membro di questo Server Discord
 		"""
-		guild_id = context.guild.id
-		member_id = member.id
+		
 
 		### errors ###
 		if delta <= 0:
 			raise discord.ext.commands.BadArgument(f"`{delta}` non è un numero valido.")
+		if delta > 5:
+			delta = 5
+			member = context.message.author
 
 		if member == self.bot.user:
 			raise discord.ext.commands.BadArgument(f"Non è possibile uccidere {member.mention}.")
+
+		guild_id = context.guild.id
+		member_id = member.id
 
 		if context.guild.id == 792523466040803368: # ⛩| Holy Quindecimᴵᵗᵃ
 			if await self.bot.is_owner(member):
@@ -84,9 +89,9 @@ class rip(commands.Cog, name="rip"):
 		Restituisce le informazioni di chi è stato ucciso
 		"""
 
-		guild_id = context.guild.id
+		# guild_id = context.guild.id
 
-		if guild_id not in config.KILLED:
+		if len(config.KILLED) == 0:
 			raise discord.ext.commands.BadArgument(f"Ancora nessun utente è morto.")
 
 		embed = discord.Embed(
@@ -95,11 +100,17 @@ class rip(commands.Cog, name="rip"):
 		)
 		embed.set_thumbnail(url="https://media.tenor.com/images/1cb732f34c3b3f90d526fee50288912c/tenor.gif")
 
-		for member_id in config.KILLED[guild_id]:
-			member = context.guild.get_member(member_id)
-			las = datetime.now() - config.KILLED[guild_id][member_id]["time"]
-			nex = config.KILLED[guild_id][member_id]["delta"] - las
-			embed.add_field(name=f"{member.name} | {member.nick}", value=f"```Tempo trascorso: {str(las)}\nTempo rimasto: {str(nex)}```", inline=False)
+		for guild_id in config.KILLED:
+
+			text = ""
+			for member_id in config.KILLED[guild_id]:
+				member = context.guild.get_member(member_id)
+				las = datetime.now() - config.KILLED[guild_id][member_id]["time"]
+				nex = config.KILLED[guild_id][member_id]["delta"] - las
+
+				text += f"**\n{member.name}** | *{member.nick}*\n```Tempo trascorso: {str(las)}\nTempo rimasto: {str(nex)}```"
+
+			embed.add_field(name=self.bot.get_guild(guild_id).name, value=text, inline=False)
 
 		await context.channel.send(embed=embed)
 

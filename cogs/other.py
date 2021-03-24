@@ -9,7 +9,7 @@ class manga(commands.Cog, name="manga"): # Posta i manga usciti
 	def __init__(self, bot):
 		self.bot = bot
 		self.channel = self.bot.get_channel(717091489557250099)
-		self.printer.start()
+		# self.printer.start()
 
 	async def get_last_chapter(self):
 		regex = re.compile(r'https:\/\/mangadex\.org\/chapter\/.*')
@@ -46,7 +46,7 @@ class hospitality(commands.Cog, name="hospitality"): # hospitality
 	def __init__(self, bot):
 		self.bot = bot
 		self.channel = self.bot.get_channel(717089928567193690)
-		self.godmorning.start()
+		# self.godmorning.start()
 
 	def get_Bullet_Club(self):
 		res = requests.get("https://mangadex.org/api/v2/group/8588")
@@ -146,4 +146,4 @@ class MessageControl(commands.Cog, name="MessageControl"): # MessageControl
 def setup(bot):
 	bot.add_cog(manga(bot))
 	bot.add_cog(hospitality(bot))
-	bot.add_cog(MessageControl(bot))
+	# bot.add_cog(MessageControl(bot))

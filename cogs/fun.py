@@ -188,7 +188,7 @@ class fun(commands.Cog, name="fun"):
 		await message.add_reaction('👎')
 
 		def check(reaction, userx):
-			return userx == user
+			return userx == user and reaction.message == message
 
 		try:
 			reaction, userx = await self.bot.wait_for('reaction_add', timeout=20, check=check)

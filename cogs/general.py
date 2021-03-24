@@ -129,5 +129,37 @@ class general(commands.Cog, name="general"):
 		await embed_message.add_reaction("👎")
 		await embed_message.add_reaction("🤷")
 
+	@commands.command(name="mclose", aliases=["mshutdown", "mturnoff", "mquit", "mexit"])
+	@commands.check(check.is_admin)
+	async def mclose(self, context):
+		"""
+		Spegnimento manuale in caso di problemi.
+		"""
+
+		NumeroAdmin = 2
+		TempoLimite = 60
+
+
+		embed = discord.Embed(
+			title="SPEGNIMENTO MANUALE",
+			colour=discord.Colour.dark_grey(),
+			description=f"Per completare lo spegnimento manuale sono necessari {NumeroAdmin} 👍 da parte di {NumeroAdmin} amministratori entro {TempoLimite} secondi.\nLo dopo lo spegnimento non sarà più possibile riaccendere il bot."
+		)
+		embed.set_image(url=f"{config.GIT_FOLDER}/general/mclose/power.png")
+
+		message = await channel.send(embed=embed)
+		await message.add_reaction('👍')
+
+		def check(reaction, userx):
+			return reaction.message == message and userc.guild_permissions.administrator and str(reaction.emoji) == '👍'
+
+		try:
+			for x in range(NumeroAdmin):
+				await self.bot.wait_for('reaction_add', timeout=TempoLimite, check=check)
+		except Exception:
+			raise discord.ext.commands.CommandError("Spegnimento Manuale fallito.")
+		else:
+			await self.bot.get_command('close').callback(self, context)
+
 def setup(bot):
 	bot.add_cog(general(bot))
