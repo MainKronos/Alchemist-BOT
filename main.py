@@ -8,12 +8,30 @@ import config
 @bot.event
 async def on_ready():
 	bot.loop.create_task(task.status_task())
+
+	print("\n╭-------------「on_ready」-------------╮\n")
+
 	print(f"Logged in as {bot.user.name}")
 	print(f"Discord.py API version: {discord.__version__}")
 	print(f"Python version: {platform.python_version()}")
 	print(f"Running on: {platform.system()} {platform.release()} ({os.name})")
-	print("-------------------")
+
+	print("\n ------------------------------------\n")
+
+	print(f'{bot.user} è collegato alle seguenti gilde:')
+	for guild in bot.guilds:
+		print(f'• {guild.name}(id: {guild.id})')
+
+	print("\n ------------------------------------\n")
+
+	print("Caricamneto cogs:")
 	load_cogs() # Carica i cogs
+	
+	print("\n╰------------------------------------╯\n")	
+
+
+
+	
 	utils.load_banned() # Carica gli tenti bannati
 
 	bot.loop.create_task(task.check_death_task())

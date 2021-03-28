@@ -142,8 +142,81 @@ class MessageControl(commands.Cog, name="MessageControl"): # MessageControl
 				await self.bot.get_command('warn').callback(self, ctx, user, txt)
 				# await message.channel.send(user)
 
+class Moderazione(commands.Cog, name="Moderazione"):
+	def __init__(self, bot):
+		self.bot = bot
+		self.wordList = []
+
+	@commands.Cog.listener()
+	async def on_message(self, message):
+
+		if message.author == self.bot.user: return
+
+		part = message.content.lower()
+
+		findWord = []
+		for word in self.wordList:
+			if part.find(word) != -1:
+				findWord.append(word)
+
+		if len(findWord) > 0:
+			txt = "Hai scritto: " + ", ".join([f"**{x}**" for x in findWord])
+
+			ctx = await self.bot.get_context(message)
+			ctx.message.author = self.bot.user
+			await self.bot.get_command('warn').callback(self, ctx, message.author, txt)
+
+class Reazioni(commands.Cog):
+	def __init__(self, bot):
+		self.bot = bot
+		self.REAZIONI = True
+
+	@commands.Cog.listener()
+	async def on_message(self, message):
+
+		if self.REAZIONI:
+
+			if message.author == self.bot.user:
+				return
+
+			rand = random.randint(1, 100)
+
+			if rand > 1:
+
+				# if message.channel.id != 717089928567193690:
+				# 	return
+					
+				# USERS = ["Krónos#9268", ""]
+				if message.author.id == 759761676139757588:
+
+					reactions = []
+					# reactions.append(self.bot.get_emoji(760586805236989982)) # coltello
+					# reactions.append(self.bot.get_emoji(760911496178827334)) # frusta
+					reactions.append(self.bot.get_emoji(806558724877189130)) # No
+					# reactions.append(self.bot.get_emoji(806558202887536650)) # popcorn
+					reactions.append(self.bot.get_emoji(812753805690535987)) # dance
+					# reactions.append("🔥")
+					# reactions.append("‼️")
+					# reactions.append("🖤")
+
+					for reac in reactions:
+						await message.add_reaction(reac)
+
+					print("Aggiunti emoji al messaggio di {}".format(message.author))
+
+			if rand > 95:
+				if message.author.id == 759761676139757588:
+					await message.delete()
+
+				# else:
+				# 	frusta = bot.get_emoji(760911496178827334)
+				# 	await message.add_reaction(frusta)
+				# 	print("> Aggiunto frusta al messaggio di {}".format(message.author))
 
 def setup(bot):
 	bot.add_cog(manga(bot))
 	bot.add_cog(hospitality(bot))
+	bot.add_cog(Reazioni(bot))
+	# bot.add_cog(Moderazione(bot))
 	# bot.add_cog(MessageControl(bot))
+	# bot.add_cog(RandomKill(bot))

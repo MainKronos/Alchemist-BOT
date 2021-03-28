@@ -1,8 +1,9 @@
-import os, sys, discord
+import os, sys, discord, asyncio
 from datetime import datetime, timedelta
 from discord.ext import commands
 from jobs import check
 import config
+import json, random, requests
 
 class rip(commands.Cog, name="rip"):
 	def __init__(self, bot):
@@ -78,6 +79,17 @@ class rip(commands.Cog, name="rip"):
 		embed.set_thumbnail(url="https://media.tenor.com/images/1cb732f34c3b3f90d526fee50288912c/tenor.gif")
 		await context.channel.send(embed=embed)
 
+
+		# await self.random_kill(context)
+
+	###### DEV #######
+	async def random_kill(self, ctx):
+		user = random.choice([x for x in ctx.guild.members if x.status != discord.Status.offline and not x.bot])
+		await asyncio.sleep(10)
+		await self.bot.get_command('kill').callback(self, ctx, user)
+		await self.random_kill(context)
+
+
 	@commands.command(name="suicide", aliases=["suicidio"])
 	async def suicide(self, context):
 		await self.kill(context, context.message.author)
@@ -104,11 +116,11 @@ class rip(commands.Cog, name="rip"):
 
 			text = ""
 			for member_id in config.KILLED[guild_id]:
-				member = context.guild.get_member(member_id)
+				member = self.bot.get_user(member_id)
 				las = datetime.now() - config.KILLED[guild_id][member_id]["time"]
 				nex = config.KILLED[guild_id][member_id]["delta"] - las
 
-				text += f"**\n{member.name}** | *{member.nick}*\n```Tempo trascorso: {str(las)}\nTempo rimasto: {str(nex)}```"
+				text += f"**\n{member.name}**\n```Tempo trascorso: {str(las)}\nTempo rimasto: {str(nex)}```"
 
 			embed.add_field(name=self.bot.get_guild(guild_id).name, value=text, inline=False)
 

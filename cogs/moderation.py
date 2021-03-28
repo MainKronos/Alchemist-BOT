@@ -58,7 +58,7 @@ class moderation(commands.Cog, name="moderation"):
 
 	@commands.command(name="warn")
 	@commands.check(check.is_admin)
-	async def warn(self, context, member: discord.Member, *args):
+	async def warn(self, context, user: discord.User, *args):
 		"""
 		Allerta un utente.
 		"""
@@ -69,7 +69,7 @@ class moderation(commands.Cog, name="moderation"):
 		reason = " ".join(args)
 		embed = discord.Embed(
 			title="User Warned!",
-			description=f"**{member}** è stato warnato da **{context.message.author}**!",
+			description=f"**{user}** è stato warnato da **{context.message.author}**!",
 			color=0x00FF00
 		)
 		embed.add_field(
@@ -78,7 +78,7 @@ class moderation(commands.Cog, name="moderation"):
 		)
 		await context.send(embed=embed)
 		try:
-			await member.send(f"Sei stato warnato da **{context.message.author}**!\nMotivo: {reason}")
+			await user.send(f"Sei stato warnato da **{context.message.author}**!\nMotivo: {reason}")
 		except:
 			pass
 
