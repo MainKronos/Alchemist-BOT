@@ -32,6 +32,43 @@ class fun(commands.Cog, name="fun"):
 
 		await ctx.channel.send(embed=embed)
 
+	@commands.command(name='teletta', help="", aliases=['guido'])
+	@check.is_in_guild(698597723451949076) # Bullet Club
+	async def teletta(self, ctx, gif=None):
+		"""
+		Invia la lista dei comandi per le gif di teletta.
+		"""
+
+		thisDir = "teletta"
+
+		localDir = f"{self.localFolder}/{thisDir}"
+
+		imgs_name = [x.split('.')[0].lower() for x in os.listdir(localDir)]
+
+		if gif == None: # manda le gif possibili
+
+			txtdesc = '\n'.join(imgs_name) # Decrizione subcomandi
+
+			embed = discord.Embed(
+				title="Teletta GIF",
+				description=f'```{txtdesc}```',
+				color=0xa8c0ff
+			)
+			await ctx.send(embed=embed)
+		else:
+			if gif.lower() in imgs_name:
+				embed = discord.Embed(
+					title=f"Teletta {gif.title()}",
+					color=0xa8c0ff
+				)
+
+				url = f"{self.gitFolder}/{thisDir}/{gif.title()+'.gif'}"
+				embed.set_image(url=url)
+				embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+				await ctx.channel.send(embed=embed)
+			else:
+				raise commands.BadArgument(f"La gif Teletta {gif} non esiste.")
+
 	@commands.command(name='bestemmia', help="", aliases=["unicorno","porcone","porco","best"], usage=r'>bestemmia (add {BESTEMMIA})/(list)')
 	async def bestemmia(self, ctx, arg=None, * ,best=None):
 		"""
