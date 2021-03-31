@@ -32,31 +32,6 @@ class fun(commands.Cog, name="fun"):
 
 		await ctx.channel.send(embed=embed)
 
-	@commands.command(name='teletta', help="", aliases=['guido'])
-	@check.is_in_guild(698597723451949076) # Bullet Club
-	async def teletta(self, ctx):
-		"""
-		Manda una gif di Teletta.
-		"""
-
-		thisDir = "teletta"
-
-		localDir = f"{self.localFolder}/{thisDir}"
-		image = random.choice(os.listdir(localDir))
-
-		title = "Teletta " + image.split('.')[0]
-
-		embed = discord.Embed(
-			title=title,
-			color=0xa8c0ff
-		)
-
-		url = f"{self.gitFolder}/{thisDir}/{image}"
-		embed.set_image(url=url)
-		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
-		await ctx.channel.send(embed=embed)
-
-
 	@commands.command(name='bestemmia', help="", aliases=["unicorno","porcone","porco","best"], usage=r'>bestemmia (add {BESTEMMIA})/(list)')
 	async def bestemmia(self, ctx, arg=None, * ,best=None):
 		"""
