@@ -11,9 +11,13 @@ class fun(commands.Cog, name="fun"):
 	def __init__(self, bot):
 		self.bot = bot
 		self.gitFolder = f"{config.GIT_FOLDER}/fun"
+		self.localFolder = "./img/fun"
 
 	@commands.command(name='nhug', help="", aliases=['tatsu'])
 	async def tatsu(self, ctx, user:discord.User=None):
+		"""
+		Richiede un abbraccio a qualcuno.
+		"""
 
 		if user == None:
 			desc = "Ti prego... **abbracciami**!"
@@ -27,6 +31,30 @@ class fun(commands.Cog, name="fun"):
 		embed.set_footer(text=f"Abbraccio necessario a {ctx.message.author.name}")
 
 		await ctx.channel.send(embed=embed)
+
+	@commands.command(name='teletta', help="", aliases=['guido'])
+	async def teletta(self, ctx):
+		"""
+		Manda una gif di Teletta.
+		"""
+
+		thisDir = "teletta"
+
+		localDir = f"{self.localFolder}/{thisDir}"
+		image = random.choice(os.listdir(localDir))
+
+		title = "Teletta " + image.split('.')[0]
+
+		embed = discord.Embed(
+			title=title,
+			color=0xa8c0ff
+		)
+
+		url = f"{self.gitFolder}/{thisDir}/{image}"
+		embed.set_image(url=url)
+		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+		await ctx.channel.send(embed=embed)
+
 
 	@commands.command(name='bestemmia', help="", aliases=["unicorno","porcone","porco","best"], usage=r'>bestemmia (add {BESTEMMIA})/(list)')
 	async def bestemmia(self, ctx, arg=None, * ,best=None):
