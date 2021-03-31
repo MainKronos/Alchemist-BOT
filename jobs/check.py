@@ -1,4 +1,5 @@
 import config
+from discord.ext import commands
 
 ##### CHECK ######
 
@@ -12,6 +13,19 @@ def is_admin(ctx): # Se è amministratore
 
 	return ctx.author.guild_permissions.administrator
 
+def is_in_guild(guild_id): # Controlla se è nella gilda
+
+	async def predicate(ctx):
+		# if is_owner(ctx):
+		# 	return True
+
+		if ctx.guild and ctx.guild.id == guild_id:
+			return True
+
+		raise commands.CommandError("Questa Server non ha i permessi per eseguire questo comando.")
+	return commands.check(predicate)
+
+
 def has_role(ctx): # Settaggi particolari per gilda
 	if is_admin(ctx):
 		return True
@@ -21,6 +35,7 @@ def has_role(ctx): # Settaggi particolari per gilda
 		return 795782994740379718 in [x.id for x in ctx.author.roles] # 795782994740379718 = 💎| Membro dello Staff •
 
 	return True
+
 
 def is_banned(ctx):
 	return ctx.message.author.id in config.BANNED

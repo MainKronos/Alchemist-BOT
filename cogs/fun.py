@@ -33,6 +33,7 @@ class fun(commands.Cog, name="fun"):
 		await ctx.channel.send(embed=embed)
 
 	@commands.command(name='teletta', help="", aliases=['guido'])
+	@check.is_in_guild(698597723451949076) # Bullet Club
 	async def teletta(self, ctx):
 		"""
 		Manda una gif di Teletta.
