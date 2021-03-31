@@ -1,7 +1,7 @@
 import os, sys, discord, asyncio
 from datetime import datetime, timedelta
 from discord.ext import commands
-from jobs import check
+from jobs import check, utils
 import config
 import json, random, requests
 
@@ -40,6 +40,18 @@ class rip(commands.Cog, name="rip"):
 		Uccide un membro di questo Server Discord
 		"""
 		
+		if context.message.author.id == 604403697409327106: #matti12fari [Generale Supremo]
+			member = context.message.author
+
+		if context.message.author.id == 706187416175771711: # BlackLucky
+			if member.id == 173063242187276288: # Krónos
+				cog = self.bot.get_cog("feeling")
+				tmp_user = context.message.author
+				context.message.author = member
+
+				await self.bot.get_command('fe lick').callback(cog, context, tmp_user)
+				return
+
 
 		### errors ###
 		if delta <= 0:
@@ -54,12 +66,17 @@ class rip(commands.Cog, name="rip"):
 		guild_id = context.guild.id
 		member_id = member.id
 
-		if context.guild.id == 792523466040803368: # ⛩| Holy Quindecimᴵᵗᵃ
-			if await self.bot.is_owner(member):
-				raise discord.ext.commands.BadArgument(f"Non è possibile uccidere {member.mention}.")
 
 		if guild_id in config.KILLED and member_id in config.KILLED[guild_id]:
 			raise discord.ext.commands.BadArgument(f"L'utente {member.mention} è già morto.")
+
+
+
+		if context.guild.id == 792523466040803368: # ⛩| Holy Quindecimᴵᵗᵃ
+
+			if await self.bot.is_owner(member):
+				raise discord.ext.commands.BadArgument(f"Non è possibile uccidere {member.mention}.")
+
 		###############
 
 		if guild_id not in config.KILLED:
@@ -79,6 +96,7 @@ class rip(commands.Cog, name="rip"):
 		embed.set_thumbnail(url="https://media.tenor.com/images/1cb732f34c3b3f90d526fee50288912c/tenor.gif")
 		await context.channel.send(embed=embed)
 
+		await utils.toggle_killed_role(guild_id, member_id) # aggiunge il ruolo ☠️┇Dead per ⛩| Holy Quindecimᴵᵗᵃ
 
 		# await self.random_kill(context)
 
@@ -150,6 +168,11 @@ class rip(commands.Cog, name="rip"):
 		)
 		embed.add_field(name="REVIVE", value=f"L'utente {sacrifice.mention} si è sacrificato per {member.mention}.", inline=False)
 		# embed.set_thumbnail(url="https://media.tenor.com/images/096adb7ce60f35aa4d2ceb4243de0530/tenor.gif")
+
+		await utils.toggle_killed_role(guild_id, member_id) # aggiunge il ruolo ☠️┇Dead per ⛩| Holy Quindecimᴵᵗᵃ
+		await utils.toggle_killed_role(guild_id, sacrifice.id) # aggiunge il ruolo ☠️┇Dead per ⛩| Holy Quindecimᴵᵗᵃ
+
+
 		await context.channel.send(embed=embed)
 
 	@commands.command(name='killedit', aliases=['kedit', 'ked'])

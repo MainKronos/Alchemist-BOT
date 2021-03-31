@@ -1,4 +1,4 @@
-import os, sys, discord
+import os, sys, discord, asyncio
 from discord.ext import commands
 from jobs import check
 import config
@@ -10,6 +10,7 @@ from io import BytesIO
 class fun(commands.Cog, name="fun"):
 	def __init__(self, bot):
 		self.bot = bot
+		self.gitFolder = f"{config.GIT_FOLDER}/fun"
 
 	@commands.command(name='nhug', help="", aliases=['tatsu'])
 	async def tatsu(self, ctx, user:discord.User=None):
@@ -63,7 +64,7 @@ class fun(commands.Cog, name="fun"):
 			description=f"**{ctx.message.author.name}** sta sturando **{user.name}**"
 		)
 
-		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/fun/stura/stura.gif")
+		embed.set_thumbnail(url=f"{self.gitFolder}/stura/stura.gif")
 
 		print(f"{ctx.author.name} sta sturando {user.name}")
 		await ctx.channel.send(embed=embed)
@@ -88,7 +89,7 @@ class fun(commands.Cog, name="fun"):
 		embed.set_footer(
 			text=f"Domanda richiesta da: {context.message.author}"
 		)
-		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/fun/8ball/8ball.png")
+		embed.set_thumbnail(url=f"{self.gitFolder}/8ball/8ball.png")
 		await context.send(embed=embed)
 
 	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
@@ -181,7 +182,7 @@ class fun(commands.Cog, name="fun"):
 		embed.add_field(name="Domanda", value=f"``{Quiz['domanda']}``", inline=False)
 		embed.add_field(name="Per", value=f"{user.mention}", inline=True)
 		embed.add_field(name="Penalità", value=f"**Morte**", inline=True)
-		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/fun/quiz/quiz.png")
+		embed.set_thumbnail(url=f"{self.gitFolder}/quiz/quiz.png")
 
 		message = await channel.send(embed=embed)
 		await message.add_reaction('👍')
@@ -208,6 +209,7 @@ class fun(commands.Cog, name="fun"):
 		
 		for x in range(5):
 			await ctx.channel.send(user.mention)
+			await asyncio.sleep(1)
 
 	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
 	@commands.cooldown(1, 1, commands.BucketType.user)

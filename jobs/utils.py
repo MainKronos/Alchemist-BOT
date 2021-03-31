@@ -19,7 +19,28 @@ async def check_death(): # Controlla se il tempo di attesa di tutte le persone m
 			channel_id = killData["channel_id"]
 
 			remove_member_killed(guild_id, member_id)
+
+			await toggle_killed_role(guild_id, member_id) # rimuove il ruolo ☠️┇Dead per ⛩| Holy Quindecimᴵᵗᵃ
+
 			await send_respawn(member_id, channel_id)
+
+
+async def toggle_killed_role(guild_id, member_id): # aggiunge  o toglie il ruolo ☠️┇Dead per la guild ⛩| Holy Quindecimᴵᵗᵃ
+	if guild_id == 792523466040803368: # ⛩| Holy Quindecimᴵᵗᵃ
+		await toggle_role(guild_id=guild_id, member_id=member_id, role_id=826176265060483132)
+
+async def toggle_role(guild_id, member_id, role_id): # aggiunge o toglie un ruolo
+	guild = bot.get_guild(guild_id)
+	member = guild.get_member(member_id)
+	kill_role = guild.get_role(role_id)
+
+	if kill_role in member.roles:
+		await member.remove_roles(kill_role)
+		print(kill_role, "tolto a", member)
+	else:
+		await member.add_roles(kill_role)
+		print(kill_role, "aggiunto a", member)
+
 
 def remove_member_killed(guild_id, member_id): # Rimuove un membro da dalla lista dei morti
 	config.KILLED[guild_id].pop(member_id)

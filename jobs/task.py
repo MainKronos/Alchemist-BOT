@@ -13,4 +13,4 @@ async def status_task():
 async def check_death_task():
 	while True:
 		await utils.check_death()
-		await asyncio.sleep(60)
+		await asyncio.sleep(10)
