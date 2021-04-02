@@ -137,6 +137,27 @@ class feeling(commands.Cog, name="feeling"):
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)
 
+	@fe.command(name="poke")
+	async def poke(self, ctx, user:discord.User):
+		"""
+		Poke.
+		"""
+		thisDir = "poke"
+
+		localDir = f"{self.localFolder}/{thisDir}"
+		image = random.choice(os.listdir(localDir))
+
+		embed = discord.Embed(
+			title="FEELING",
+			description=f'{user.mention}, poke!',
+			color=0xff758c
+		)
+
+		url = f"{self.gitFolder}/{thisDir}/{image}"
+		embed.set_image(url=url)
+		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+		await ctx.channel.send(embed=embed)
+
 	@fe.command(name='baka')
 	async def baka(self, ctx, user:discord.User):
 		"""
@@ -157,6 +178,48 @@ class feeling(commands.Cog, name="feeling"):
 		)
 
 		url = f"{self.gitFolder}/{thisDir}/{AnimePict}"
+		embed.set_image(url=url)
+		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+		await ctx.channel.send(embed=embed)
+
+	@fe.command(name="cry")
+	async def cry(self, ctx):
+		"""
+		Piangi.
+		"""
+		thisDir = "cry"
+
+		localDir = f"{self.localFolder}/{thisDir}"
+		image = random.choice(os.listdir(localDir))
+
+		embed = discord.Embed(
+			title="FEELING",
+			description=f'{ctx.author.mention} stà piangendo...',
+			color=0xff758c
+		)
+
+		url = f"{self.gitFolder}/{thisDir}/{image}"
+		embed.set_image(url=url)
+		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+		await ctx.channel.send(embed=embed)
+
+	@fe.command(name="happy")
+	async def happy(self, ctx):
+		"""
+		Sii felice.
+		"""
+		thisDir = "happy"
+
+		localDir = f"{self.localFolder}/{thisDir}"
+		image = random.choice(os.listdir(localDir))
+
+		embed = discord.Embed(
+			title="FEELING",
+			description=f'{ctx.author.mention} è felice!!',
+			color=0xff758c
+		)
+
+		url = f"{self.gitFolder}/{thisDir}/{image}"
 		embed.set_image(url=url)
 		embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
 		await ctx.channel.send(embed=embed)

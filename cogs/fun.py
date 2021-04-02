@@ -13,7 +13,7 @@ class fun(commands.Cog, name="fun"):
 		self.gitFolder = f"{config.GIT_FOLDER}/fun"
 		self.localFolder = "./img/fun"
 
-	@commands.command(name='nhug', help="", aliases=['tatsu'])
+	@commands.command(name='nhug', aliases=['tatsu'])
 	async def tatsu(self, ctx, user:discord.User=None):
 		"""
 		Richiede un abbraccio a qualcuno.
@@ -32,7 +32,7 @@ class fun(commands.Cog, name="fun"):
 
 		await ctx.channel.send(embed=embed)
 
-	@commands.command(name='teletta', help="", aliases=['guido'])
+	@commands.command(name='teletta', aliases=['guido'])
 	@check.is_in_guild(698597723451949076) # Bullet Club
 	async def teletta(self, ctx, gif=None):
 		"""
@@ -69,7 +69,7 @@ class fun(commands.Cog, name="fun"):
 			else:
 				raise commands.BadArgument(f"La gif Teletta {gif} non esiste.")
 
-	@commands.command(name='bestemmia', help="", aliases=["unicorno","porcone","porco","best"], usage=r'>bestemmia (add {BESTEMMIA})/(list)')
+	@commands.command(name='bestemmia', aliases=["unicorno","porcone","porco","best"], usage=r'>bestemmia (add {BESTEMMIA})/(list)')
 	async def bestemmia(self, ctx, arg=None, * ,best=None):
 		"""
 		Scrive una bestemmia.
