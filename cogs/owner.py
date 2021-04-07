@@ -1,4 +1,4 @@
-import os, sys, discord
+import os, sys, discord, json
 from discord.ext import commands
 from jobs import check, utils
 import config
@@ -45,6 +45,22 @@ class owner(commands.Cog, name="owner"):
 		self.bot.clear()
 		await self.bot.logout()
 		await self.bot.close()
+
+	@owner.command(name="download")
+	@commands.check(check.is_owner)
+	async def download(self, context, messaggi:int=100):
+		"""
+		Scarica la chat.
+		"""
+
+		file = {"conversations": []}
+
+		async for message in context.channel.history(limit=messaggi):
+			file["conversations"].append(message.clean_content)
+
+		with open("ChatData.json", 'w') as f:
+			f.write(json.dumps(file, indent='\t'))
+
 
 	@owner.command(name="leaveg")
 	@commands.check(check.is_owner)
