@@ -70,12 +70,12 @@ class owner(commands.Cog, name="owner"):
 		"""
 
 		embed = discord.Embed(
-			description="Shutting down. Bye! :wave:",
+			description=f"Uscendo dalla Gilda {guild}",
 			color=0x00FF00
 		)
 		await context.send(embed=embed)
 
-		if guild not in bot.guilds:
+		if guild not in self.bot.guilds:
 			raise discord.ext.commands.BadArgument(f"Il bot non è un membro della Gilda {guild.name}.")
 
 

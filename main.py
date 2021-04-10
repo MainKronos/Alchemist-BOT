@@ -67,6 +67,10 @@ def load_cogs():
 # 		embed.set_image(url="https://media.tenor.com/images/53348563aa3274baef152a8fe1433d6f/tenor.gif")
 # 		await ctx.channel.send(embed=embed)
 
+@bot.event
+async def on_guild_join(guild):
+	guild.leave()
+
 # The code in this event is executed every time someone sends a message, with or without the prefix
 @bot.event
 async def on_message(message):

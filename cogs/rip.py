@@ -40,17 +40,17 @@ class rip(commands.Cog, name="rip"):
 		Uccide un membro di questo Server Discord
 		"""
 		
-		if context.message.author.id == 604403697409327106: #matti12fari [Generale Supremo]
-			member = context.message.author
+		# if context.message.author.id == 604403697409327106: #matti12fari [Generale Supremo]
+		# 	member = context.message.author
 
-		if context.message.author.id == 706187416175771711: # BlackLucky
-			if member.id == 173063242187276288: # Krónos
-				cog = self.bot.get_cog("feeling")
-				tmp_user = context.message.author
-				context.message.author = member
+		# if context.message.author.id == 706187416175771711: # BlackLucky
+		# 	if member.id == 173063242187276288: # Krónos
+		# 		cog = self.bot.get_cog("feeling")
+		# 		tmp_user = context.message.author
+		# 		context.message.author = member
 
-				await self.bot.get_command('fe lick').callback(cog, context, tmp_user)
-				return
+		# 		await self.bot.get_command('fe lick').callback(cog, context, tmp_user)
+		# 		return
 
 
 		### errors ###

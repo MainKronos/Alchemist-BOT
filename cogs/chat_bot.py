@@ -43,11 +43,14 @@ class MyChatBot(commands.Cog, name="MyChatBot"): # MyChatBot
 	async def on_message(self, message):
 
 		if message.author == self.bot.user: return
-		if message.channel.id != 829023211748327474: return
 		if message.content.startswith(">"): return
+		if message.channel.id not in [829023211748327474, 717089928567193690, 792523466040803371]: return
 
 		response = self.chat_bot.get_response(message.clean_content)
-		await message.channel.send(response)
+
+
+		if message.channel.id == 829023211748327474: 
+			await message.channel.send(response)
 
 
 def setup(bot):
