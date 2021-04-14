@@ -34,7 +34,8 @@ class rip(commands.Cog, name="rip"):
 			await message.delete()
 
 	@commands.command(name="kill")
-	@commands.check(check.has_role)
+	# @commands.check(check.has_role)
+	@commands.check(check.is_admin)
 	async def kill(self, context, member: discord.Member, delta:int=1):
 		"""
 		Uccide un membro di questo Server Discord
@@ -109,8 +110,13 @@ class rip(commands.Cog, name="rip"):
 
 
 	@commands.command(name="suicide", aliases=["suicidio"])
-	async def suicide(self, context):
-		await self.kill(context, context.message.author)
+	async def suicide(self, context, member: discord.Member=None):
+
+		if member == None:
+			await self.kill(context, context.message.author)
+		else:
+			await self.kill(context, context.message.author, 2)
+			await self.kill(context, member)
 
 	@commands.command(name="killinfo", aliases=["kinfo", "kill_info", "kinf"])
 	@commands.check(check.has_role)

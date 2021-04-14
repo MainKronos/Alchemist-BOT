@@ -221,7 +221,7 @@ class Reazioni(commands.Cog):
 def setup(bot):
 	bot.add_cog(manga(bot))
 	bot.add_cog(hospitality(bot))
-	bot.add_cog(Reazioni(bot))
+	# bot.add_cog(Reazioni(bot))
 	# bot.add_cog(Moderazione(bot))
 	# bot.add_cog(MessageControl(bot))
 	# bot.add_cog(RandomKill(bot))

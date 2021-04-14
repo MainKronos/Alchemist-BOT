@@ -252,65 +252,43 @@ class fun(commands.Cog, name="fun"):
 			await ctx.channel.send(user.mention)
 			await asyncio.sleep(1)
 
-	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
-	@commands.cooldown(1, 1, commands.BucketType.user)
-	async def hentai(self, ctx, *, tag=""):
+	@commands.command(name='surprise', usage=r'>tag')
+	async def surprise(self, ctx):
 		"""
-		Invia hentai (tags scive i tags più popolari)
+		È una sorpresa.
 		"""
 
-		params = {
-			'format':'json'
-		}
 
-		embed = None
-
-		warningEmbed = discord.Embed(
-			title="WARNING",
+		embed = discord.Embed(
+			title="Surprise!",
+			description="🎉🎉🎉🎉",
 			colour = discord.Colour.blurple()
 		)
 
-		channel = None
-		if not ctx.channel.is_nsfw():
-			channel = discord.utils.find(lambda channel: channel.is_nsfw(), ctx.guild.text_channels)
-			warningEmbed.add_field(name=f"Messaggi inviato in", value=f"{channel.mention}", inline=False)
-		else:
-			channel = ctx.channel
+		embed.set_image(url="https://media1.tenor.com/images/7ded99794cae56c4ceb907c652c4428f/tenor.gif?itemid=20423186")
 
-		if tag == 'tags':
+		await ctx.channel.send(embed=embed)
+
+	@commands.command(name="nick")
+	@check.has_role(783255213230391296) # 「🔖」TeamScan
+	async def nick(self, context, member: discord.Member, *, name: str=None):
+		"""
+		Cambia il nickname di un Membro del Server.
+		"""
+		if member.top_role < context.guild.get_member(self.bot.user.id).top_role:
+
 			embed = discord.Embed(
-				title="TAGS POPOLARI",
-				colour = discord.Colour.blurple()
+				title="Nickname Cambiato!",
+				description=f"Il nuovo nickname di **{member}** è **{name}**!",
+				color=0x00FF00
 			)
+			await context.send(embed=embed)
+			await member.edit(nick=name)
 
-			res = requests.get(f'https://danbooru.donmai.us/tags?search[order]=count&limit=24', params=params, timeout=3).json()
-			response = " ".join([x["name"] for x in res])
-			ordinal = 1
-			for tag in res:
-				embed.add_field(name=f"{ordinal}° Posto", value=f"``{tag['name']}``", inline=True)
-				ordinal += 1
-			embed.add_field(name=f"({ordinal}° Posto)", value=f"``socks``", inline=True)
-		else:	
-			await ctx.message.delete()
+		else:
+			raise discord.ext.commands.CommandError(f"{self.bot.user.mention} non può modificare il nickname di {member.mention}")
 
-			tag = tag.lower().replace(" ", "_")
-			try:
-				res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params=params, timeout=3).json()
 
-				image = res["file_url"]
-			except Exception as e:
-				print(e)
-				return
-
-			embed = discord.Embed()
-			embed.set_image(url=image)
-			text =  ", ".join([f"{x}" for x in res["tag_string"].split(' ')])
-			embed.set_footer(text=f"Tags: {text}")
-
-		await channel.send(embed=embed)
-		
-		if not ctx.channel.is_nsfw():
-			await ctx.channel.send(embed=warningEmbed)
 
 def setup(bot):
 	bot.add_cog(fun(bot))

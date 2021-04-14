@@ -37,25 +37,6 @@ class moderation(commands.Cog, name="moderation"):
 		else:
 			raise discord.ext.commands.CheckFailure()
 
-	@commands.command(name="nick")
-	@commands.check(check.is_admin)
-	async def nick(self, context, member: discord.Member, *, name: str):
-		"""
-		Cambia il nickname di un Membro del Server.
-		"""
-		if context.message.author.guild_permissions.administrator:
-			if name.lower() == "None":
-				name = None
-			embed = discord.Embed(
-				title="Nickname Cambiato!",
-				description=f"Il nuovo nickname di **{member}** è **{name}**!",
-				color=0x00FF00
-			)
-			await context.send(embed=embed)
-			await member.change_nickname(name)
-		else:
-			raise discord.ext.commands.CheckFailure()
-
 	@commands.command(name="warn")
 	@commands.check(check.is_admin)
 	async def warn(self, context, user: discord.User, *args):
