@@ -5,7 +5,7 @@ import config
 import json, random, requests
 
 from PIL import *
-from PIL import ImageFilter, ImageDraw 
+from PIL import ImageFilter, ImageDraw, Image, ImageSequence
 from io import BytesIO
 
 # @commands.cooldown(1, 600, commands.BucketType.category)
@@ -46,22 +46,28 @@ class image_processing(commands.Cog, name="image processing"):
 		Brucia sul rogo qualcuno.
 		"""
 
-		process_img = "fire.png"
+		process_img = "fire.gif"
 
 		burnfile=f"{self.localFolder}/{process_img}"
 		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
 
 
 		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
-		fire = Image.open(burnfile).convert("RGBA")
+		fire = Image.open(burnfile)
 
 		avatar = avatar.resize((500, 500))
-		fire = fire.resize((500, 500))
+		# fire = fire.resize((500, 500))
 
-		burninate = Image.blend(avatar, fire, alpha=0.7)
+		frames = []
+
+		for frame in ImageSequence.Iterator(fire):
+			frame = frame.convert("RGBA").resize((500, 500))
+			burninate = Image.blend(avatar.copy(), frame, alpha=0.7)
+			frames.append(burninate)
+
 
 		final_buffer = BytesIO()
-		burninate.save(final_buffer, "png")
+		frames[0].save(final_buffer, format="GIF", save_all=True, append_images=frames[1:], optimize=False, loop=0)
 		final_buffer.seek(0)
 
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.png"))

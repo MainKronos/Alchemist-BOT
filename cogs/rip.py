@@ -34,8 +34,8 @@ class rip(commands.Cog, name="rip"):
 			await message.delete()
 
 	@commands.command(name="kill")
-	# @commands.check(check.has_role)
-	@commands.check(check.is_admin)
+	@commands.check(check.has_role)
+	# @commands.check(check.is_admin)
 	async def kill(self, context, member: discord.Member, delta:int=1):
 		"""
 		Uccide un membro di questo Server Discord
