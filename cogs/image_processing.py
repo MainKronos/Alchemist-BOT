@@ -70,7 +70,7 @@ class image_processing(commands.Cog, name="image processing"):
 		frames[0].save(final_buffer, format="GIF", save_all=True, append_images=frames[1:], optimize=False, loop=0)
 		final_buffer.seek(0)
 
-		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.png"))
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.gif"))
 
 	@im.command(name='trash')
 	@commands.cooldown(1, 2, commands.BucketType.guild)
