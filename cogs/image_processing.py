@@ -72,6 +72,41 @@ class image_processing(commands.Cog, name="image processing"):
 
 		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.gif"))
 
+	@im.command(name='salt')
+	@commands.cooldown(1, 2, commands.BucketType.guild)
+	async def salt(self, ctx, user:discord.User):
+		"""
+		Metti un po' di sale.
+		"""
+
+		process_img = "salt.gif"
+
+		saltfile=f"{self.localFolder}/{process_img}"
+		avatar_bytes = await user.avatar_url_as(format="png", size=1024).read()
+
+
+		avatar = Image.open(BytesIO(avatar_bytes)).convert("RGBA")
+		salt = Image.open(saltfile)
+
+		avatar = avatar.resize((500, 500))
+
+		frames = []
+
+		for frame in ImageSequence.Iterator(salt):
+			frame = frame.convert("RGBA").resize((500, 500))
+
+			new_frame = avatar.copy()
+			
+			new_frame.paste(frame, mask=frame) 
+			frames.append(new_frame)
+
+
+		final_buffer = BytesIO()
+		frames[0].save(final_buffer, format="GIF", save_all=True, append_images=frames[1:], optimize=False, loop=0)
+		final_buffer.seek(0)
+
+		await ctx.channel.send(file=discord.File(fp=final_buffer, filename="burn.gif"))
+
 	@im.command(name='trash')
 	@commands.cooldown(1, 2, commands.BucketType.guild)
 	async def trash(self, ctx, user:discord.User):
