@@ -34,7 +34,7 @@ class rip(commands.Cog, name="rip"):
 			await message.delete()
 
 	@commands.command(name="kill")
-	@commands.check(check.has_role)
+	@check.has_role(795782994740379718, 792523466040803368)
 	# @commands.check(check.is_admin)
 	async def kill(self, context, member: discord.Member, delta:int=1):
 		"""

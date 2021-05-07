@@ -133,6 +133,19 @@ class fun(commands.Cog, name="fun"):
 		embed.set_thumbnail(url=f"{self.gitFolder}/8ball/8ball.png")
 		await context.send(embed=embed)
 
+	@commands.command(name="dice")
+	@commands.cooldown(1, 5, commands.BucketType.guild)
+	async def dice(self, context, face:int=6):
+
+		embed = discord.Embed(
+			title="**Il dado è tratto!**",
+			description=f"{random.randint(1, face)}",
+			color=0x00FF00
+		)
+		embed.set_thumbnail(url=f"https://media.tenor.com/images/73659ccb799438fa79e9c9a876194f1d/tenor.gif")
+		await context.send(embed=embed)
+
+
 	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
 	# @commands.cooldown(1, 1, commands.BucketType.user)
 	async def hentai(self, ctx, *, tag=""):
@@ -270,7 +283,7 @@ class fun(commands.Cog, name="fun"):
 		await ctx.channel.send(embed=embed)
 
 	@commands.command(name="nick")
-	@check.has_role(783255213230391296) # 「🔖」TeamScan
+	@check.has_role(783255213230391296, 698597723451949076) # 「🔖」TeamScan
 	async def nick(self, context, member: discord.Member, *, name: str=None):
 		"""
 		Cambia il nickname di un Membro del Server.

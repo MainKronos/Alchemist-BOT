@@ -25,13 +25,16 @@ def is_in_guild(guild_id): # Controlla se è nella gilda
 		raise commands.CommandError("Questa Server non ha i permessi per eseguire questo comando.")
 	return commands.check(predicate)
 
-def has_role(role_id):
+def has_role(role_id, guild_id):
 	async def predicate(ctx):
 		if is_owner(ctx):
 			return True
 
-		if role_id in [x.id for x in ctx.author.roles]:
+		if ctx.guild.id != guild_id:
 			return True
+		else:
+			if role_id in [x.id for x in ctx.author.roles]:
+				return True
 
 		raise commands.CommandError("Non hai il ruolo necessario per eseguire questo comando..")
 	return commands.check(predicate)
