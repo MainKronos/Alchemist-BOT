@@ -119,7 +119,6 @@ class rip(commands.Cog, name="rip"):
 			await self.kill(context, member)
 
 	@commands.command(name="killinfo", aliases=["kinfo", "kill_info", "kinf"])
-	@commands.check(check.has_role)
 	async def killinfo(self, context):
 		"""
 		Restituisce le informazioni di chi è stato ucciso
