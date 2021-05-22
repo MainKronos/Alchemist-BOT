@@ -145,27 +145,20 @@ class MessageControl(commands.Cog, name="MessageControl"): # MessageControl
 class Moderazione(commands.Cog, name="Moderazione"):
 	def __init__(self, bot):
 		self.bot = bot
-		self.wordList = []
+		self.wordList = ["."]
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
 
 		if message.author == self.bot.user: return
 
-		part = message.content.lower()
+		msg = message.content.lower()
 
-		findWord = []
-		for word in self.wordList:
-			if part.find(word) != -1:
-				findWord.append(word)
+		if msg == ".":
+			if message.author.id == 583627239128825857:
+				await message.delete()
 
-		if len(findWord) > 0:
-			txt = "Hai scritto: " + ", ".join([f"**{x}**" for x in findWord])
-
-			ctx = await self.bot.get_context(message)
-			ctx.message.author = self.bot.user
-			await self.bot.get_command('warn').callback(self, ctx, message.author, txt)
-
+		
 class Reazioni(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -229,7 +222,7 @@ class Reazioni(commands.Cog):
 def setup(bot):
 	bot.add_cog(manga(bot))
 	bot.add_cog(hospitality(bot))
-	bot.add_cog(Reazioni(bot))
-	# bot.add_cog(Moderazione(bot))
+	# bot.add_cog(Reazioni(bot))
+	bot.add_cog(Moderazione(bot))
 	# bot.add_cog(MessageControl(bot))
 	# bot.add_cog(RandomKill(bot))
