@@ -179,12 +179,21 @@ class Reazioni(commands.Cog):
 			if message.author == self.bot.user:
 				return
 
+			if message.content == ".":
 
-			if message.author.id == 759761676139757588:	
-				rand = random.randint(1, 100)
+				if message.author.id == 583627239128825857:
 
-				if rand > 70:
-					await message.reply("BAKA")
+					coltello = self.bot.get_emoji(760586805236989982)  # coltello
+
+					for x in range(3):
+						await message.channel.send(coltello)
+
+
+
+
+				# if rand > 70:
+				# 	await message.reply("BAKA")
+
 
 				# if rand > 97:
 				# 	await message.delete()
@@ -221,7 +230,7 @@ class Reazioni(commands.Cog):
 def setup(bot):
 	bot.add_cog(manga(bot))
 	bot.add_cog(hospitality(bot))
-	# bot.add_cog(Reazioni(bot))
+	bot.add_cog(Reazioni(bot))
 	# bot.add_cog(Moderazione(bot))
 	# bot.add_cog(MessageControl(bot))
 	# bot.add_cog(RandomKill(bot))
