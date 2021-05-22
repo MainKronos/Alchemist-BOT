@@ -185,8 +185,7 @@ class Reazioni(commands.Cog):
 
 					coltello = self.bot.get_emoji(760586805236989982)  # coltello
 
-					for x in range(3):
-						await message.channel.send(coltello)
+					await message.channel.send(coltello)
 
 
 
