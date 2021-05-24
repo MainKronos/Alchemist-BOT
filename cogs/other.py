@@ -154,11 +154,14 @@ class Moderazione(commands.Cog, name="Moderazione"):
 
 		msg = message.content.lower()
 
-		if msg == ".":
-			if message.author.id == 583627239128825857:
+		if len(msg) == 1:
+			if message.channel.id in [835137512657387520, 717089928567193690]:
 				await message.delete()
 
-		
+
+
+
+
 class Reazioni(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -223,6 +226,6 @@ def setup(bot):
 	bot.add_cog(manga(bot))
 	bot.add_cog(hospitality(bot))
 	# bot.add_cog(Reazioni(bot))
-	bot.add_cog(Moderazione(bot))
+	# bot.add_cog(Moderazione(bot))
 	# bot.add_cog(MessageControl(bot))
 	# bot.add_cog(RandomKill(bot))
