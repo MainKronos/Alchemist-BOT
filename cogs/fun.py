@@ -32,6 +32,13 @@ class fun(commands.Cog, name="fun"):
 
 		await ctx.channel.send(embed=embed)
 
+	@commands.command(name='padoru')
+	async def padoru(self, ctx):
+		"""
+		Invia 280 volte la scritta padoru.
+		"""
+		await ctx.channel.send("padoru "*280)
+
 	@commands.command(name='teletta', aliases=['guido'])
 	@check.is_in_guild(698597723451949076) # Bullet Club
 	async def teletta(self, ctx, gif=None):

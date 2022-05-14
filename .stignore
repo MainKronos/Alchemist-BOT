@@ -1,0 +1,5 @@
+__pycache__
+database.sqlite3
+sentence_tokenizer.pickle
+database.sqlite3-wal
+database.sqlite3-shm

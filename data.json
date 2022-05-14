@@ -1,0 +1,201 @@
+{
+	"result": "ok",
+	"data": {
+		"id": "24af0628-fe13-4d9d-844d-339717e09868",
+		"type": "manga",
+		"attributes": {
+			"title": {
+				"en": "I Stack Experience Through Reading Books"
+			},
+			"altTitles": [
+				{
+					"en": "I Stack Experience Through Writing Books"
+				},
+				{
+					"en": "Kono Hon wa Boku no Keiken-chi o Unda"
+				},
+				{
+					"en": "\u0645\u0646 \u0627\u0632 \u06a9\u062a\u0627\u0628 \u0646\u0648\u0634\u062a\u0646\u060c \u062a\u062c\u0631\u0628\u0647 \u06a9\u0633\u0628 \u0645\u06cc\u200c\u06a9\u0646\u0645"
+				},
+				{
+					"en": "\u0645\u0646 \u0628\u0627 \u0646\u0648\u0634\u062a\u0646 \u062f\u0631 \u06a9\u062a\u0627\u0628\u060c \u062a\u062c\u0631\u0628\u0647 \u0645\u06cc\u200c\u06af\u06cc\u0631\u0645"
+				},
+				{
+					"en": "\u110e\u1162\u11a8\u110b\u1173\u11af \u110b\u1175\u11b0\u110b\u1173\u1106\u1167\u11ab \u1100\u1167\u11bc\u1112\u1165\u11b7\u110b\u1175 \u110a\u1161\u11c2\u110b\u1167"
+				},
+				{
+					"en": "\u3053\u306e\u672c\u306f\u50d5\u306e\u7d4c\u9a13\u5024\u3092\u751f\u3093\u305f\u3099"
+				}
+			],
+			"description": {
+				"en": "The main character, Jong-Seok Lee used to be your average, run of the mill person. The only thing remotely interesting about him is the fact that he\u2019s always at local book stores. All of that changes when he suddenly encounters a completely blank book and foolishly accepts what\u2019s asked of him..."
+			},
+			"links": {
+				"al": "119545",
+				"ap": "i-stack-experience-through-reading-books",
+				"kt": "56499",
+				"mu": "166131",
+				"nu": "accumulate-experience-by-reading-books",
+				"raw": "https://page.kakao.com/home/51595620"
+			},
+			"originalLanguage": "ko",
+			"lastVolume": null,
+			"lastChapter": null,
+			"publicationDemographic": "shounen",
+			"status": "ongoing",
+			"year": null,
+			"contentRating": "safe",
+			"tags": [
+				{
+					"id": "3e2b8dae-350e-4ab8-a8ce-016e844b9f0d",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Long Strip"
+						},
+						"description": [],
+						"group": "format",
+						"version": 1
+					}
+				},
+				{
+					"id": "423e2eae-a7a2-4a8b-ac03-a8351462d71d",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Romance"
+						},
+						"description": [],
+						"group": "genre",
+						"version": 1
+					}
+				},
+				{
+					"id": "caaa44eb-cd40-4177-b930-79d3ef2afe87",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "School Life"
+						},
+						"description": [],
+						"group": "theme",
+						"version": 1
+					}
+				},
+				{
+					"id": "e197df38-d0e7-43b5-9b09-2842d0c326dd",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Web Comic"
+						},
+						"description": [],
+						"group": "format",
+						"version": 1
+					}
+				},
+				{
+					"id": "e5301a23-ebd9-49dd-a0cb-2add944c7fe9",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Slice of Life"
+						},
+						"description": [],
+						"group": "genre",
+						"version": 1
+					}
+				},
+				{
+					"id": "ea2bc92d-1c26-4930-9b7c-d5c0dc1b6869",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Cooking"
+						},
+						"description": [],
+						"group": "theme",
+						"version": 1
+					}
+				},
+				{
+					"id": "eabc5b4c-6aff-42f3-b657-3e90cbd00b75",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Supernatural"
+						},
+						"description": [],
+						"group": "theme",
+						"version": 1
+					}
+				},
+				{
+					"id": "ee968100-4191-4968-93d3-f82d72be7e46",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Mystery"
+						},
+						"description": [],
+						"group": "genre",
+						"version": 1
+					}
+				},
+				{
+					"id": "f4122d1c-3b44-44d0-9936-ff7502c39ad3",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Adaptation"
+						},
+						"description": [],
+						"group": "format",
+						"version": 1
+					}
+				},
+				{
+					"id": "f5ba408b-0e7a-484d-8d49-4e9125ac96de",
+					"type": "tag",
+					"attributes": {
+						"name": {
+							"en": "Full Color"
+						},
+						"description": [],
+						"group": "format",
+						"version": 1
+					}
+				}
+			],
+			"createdAt": "2020-07-19T05:18:25+00:00",
+			"updatedAt": "2021-05-25T15:40:27+00:00",
+			"version": 2
+		}
+	},
+	"relationships": [
+		{
+			"id": "1cee7a1d-522b-4a74-a331-748effb5f9dd",
+			"type": "author"
+		},
+		{
+			"id": "0d42d32a-8d8f-4533-81af-9ef78f160595",
+			"type": "artist"
+		},
+		{
+			"id": "d570b8a3-8e78-427a-91c4-e617f00cb926",
+			"type": "artist"
+		},
+		{
+			"id": "be470d9c-55c0-4fda-8dea-94d78ca123d1",
+			"type": "cover_art",
+			"attributes": {
+				"description": "",
+				"volume": null,
+				"fileName": "e4ab5621-c9e1-4318-836e-43d7dceddf57.jpg",
+				"createdAt": "2021-05-24T18:03:32+00:00",
+				"updatedAt": "2021-05-24T18:03:32+00:00",
+				"version": 1
+			}
+		}
+	]
+}
