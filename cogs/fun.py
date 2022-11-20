@@ -1,87 +1,67 @@
 import os, sys, discord, asyncio
-from discord.ext import commands
-from jobs import check
+from discord.ext.commands import Cog
+from discord import app_commands
 import config
 import json, random, requests
 
 from PIL import Image
 from io import BytesIO
 
-class fun(commands.Cog, name="fun"):
+class fun(Cog, name="fun"):
 	def __init__(self, bot):
 		self.bot = bot
 		self.gitFolder = f"{config.GIT_FOLDER}/fun"
 		self.localFolder = "./img/fun"
 
-	@commands.command(name='nhug', aliases=['tatsu'])
-	async def tatsu(self, ctx, user:discord.User=None):
-		"""
-		Richiede un abbraccio a qualcuno.
-		"""
-
-		if user == None:
-			desc = "Ti prego... **abbracciami**!"
-		else:
-			desc = f"{user.mention}, ti prego... **abbracciami**!"
-
-		embed = discord.Embed(
-			description=desc
-		)
-		embed.set_image(url="https://media1.tenor.com/images/5b2bbfcbc1724a0bdc1b48dcf89274d6/tenor.gif")
-		embed.set_footer(text=f"Abbraccio necessario a {ctx.message.author.name}")
-
-		await ctx.channel.send(embed=embed)
-
-	@commands.command(name='padoru')
-	async def padoru(self, ctx):
+	@app_commands.command(name='padoru')
+	async def padoru(self, interaction: discord.Interaction):
 		"""
 		Invia 280 volte la scritta padoru.
 		"""
-		await ctx.channel.send("padoru "*280)
+		await interaction.response.send_message("padoru "*280)
 
-	@commands.command(name='teletta', aliases=['guido'])
-	@check.is_in_guild(698597723451949076) # Bullet Club
-	async def teletta(self, ctx, gif=None):
+	# @commands.command(name='teletta', aliases=['guido'])
+	# @check.is_in_guild(698597723451949076) # Bullet Club
+	# async def teletta(self, ctx, gif=None):
+	# 	"""
+	# 	Invia la lista dei comandi per le gif di teletta.
+	# 	"""
+
+	# 	thisDir = "teletta"
+
+	# 	localDir = f"{self.localFolder}/{thisDir}"
+
+	# 	imgs_name = [x.split('.')[0].lower() for x in os.listdir(localDir)]
+
+	# 	if gif == None: # manda le gif possibili
+
+	# 		txtdesc = '\n'.join(imgs_name) # Decrizione subcomandi
+
+	# 		embed = discord.Embed(
+	# 			title="Teletta GIF",
+	# 			description=f'```{txtdesc}```',
+	# 			color=0xa8c0ff
+	# 		)
+	# 		await ctx.send(embed=embed)
+	# 	else:
+	# 		if gif.lower() in imgs_name:
+	# 			embed = discord.Embed(
+	# 				title=f"Teletta {gif.title()}",
+	# 				color=0xa8c0ff
+	# 			)
+
+	# 			url = f"{self.gitFolder}/{thisDir}/{gif.title()+'.gif'}"
+	# 			embed.set_image(url=url)
+	# 			embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
+	# 			await ctx.channel.send(embed=embed)
+	# 		else:
+	# 			raise commands.BadArgument(f"La gif Teletta {gif} non esiste.")
+
+	@app_commands.command(name='bestemmia')
+	async def bestemmia(self, interaction: discord.Interaction):
 		"""
-		Invia la lista dei comandi per le gif di teletta.
+		Invia una bestemmia.
 		"""
-
-		thisDir = "teletta"
-
-		localDir = f"{self.localFolder}/{thisDir}"
-
-		imgs_name = [x.split('.')[0].lower() for x in os.listdir(localDir)]
-
-		if gif == None: # manda le gif possibili
-
-			txtdesc = '\n'.join(imgs_name) # Decrizione subcomandi
-
-			embed = discord.Embed(
-				title="Teletta GIF",
-				description=f'```{txtdesc}```',
-				color=0xa8c0ff
-			)
-			await ctx.send(embed=embed)
-		else:
-			if gif.lower() in imgs_name:
-				embed = discord.Embed(
-					title=f"Teletta {gif.title()}",
-					color=0xa8c0ff
-				)
-
-				url = f"{self.gitFolder}/{thisDir}/{gif.title()+'.gif'}"
-				embed.set_image(url=url)
-				embed.set_footer(text=f"messaggio inviato da {ctx.message.author.name}")
-				await ctx.channel.send(embed=embed)
-			else:
-				raise commands.BadArgument(f"La gif Teletta {gif} non esiste.")
-
-	@commands.command(name='bestemmia', aliases=["unicorno","porcone","porco","best"], usage=r'>bestemmia (add {BESTEMMIA})/(list)')
-	async def bestemmia(self, ctx, arg=None, * ,best=None):
-		"""
-		Scrive una bestemmia.
-		"""
-		# Scrive una bestemmia (con 'list' le scrive tutte, con 'add' ne aggiunge una)
 
 		f=open('json/bestList.json', 'r')
 		bestemmieList = json.loads(f.read())
@@ -89,39 +69,45 @@ class fun(commands.Cog, name="fun"):
 
 		response = random.choice(bestemmieList)
 
-		if check.need_censura(ctx): 
-			response = f"||{response}||"
+		await interaction.response.send_message(response)
 
-		await ctx.channel.send(response)
-
-	@commands.command(name='stura', usage=r'>stura ({USER})')
-	async def stura(self, ctx, user:discord.User=None):
+	@app_commands.command(name='stura')
+	async def stura(self, interaction: discord.Interaction, user:discord.User=None):
 		"""
-		Stura qualcuno (se non è specificato chi, ne prende uno a caso)
+		Stura qualcuno.
+
+		Parameters
+		----------
+		user: User
+			Utente da sturare
 		"""
 
 		if user == self.bot.user:
-			raise discord.ext.commands.BadArgument(f"Impossibile sturare {bot.user.mention}")	
+			raise discord.ext.commands.BadArgument(f"Impossibile sturare {self.bot.user.mention}")	
 
 		if user==None:
-			user = random.choice([x for x in ctx.guild.members if x.status != discord.Status.offline])
+			user = random.choice([x for x in interaction.guild.members if x.status != discord.Status.offline])
 
 		embed = discord.Embed(
 			title="Stura",
 			colour = discord.Colour.blue(),
-			description=f"**{ctx.message.author.name}** sta sturando **{user.name}**"
+			description=f"**{interaction.user.mention}** sta sturando **{user.mention}**"
 		)
 
 		embed.set_thumbnail(url=f"{self.gitFolder}/stura/stura.gif")
 
-		print(f"{ctx.author.name} sta sturando {user.name}")
-		await ctx.channel.send(embed=embed)
+		print(f"{interaction.user.name} sta sturando {user.name}")
+		await interaction.response.send_message(embed=embed)
 
-	@commands.command(name="8ball")
-	@commands.cooldown(1, 5, commands.BucketType.guild)
-	async def eight_ball(self, context, *, args):
+	@app_commands.command(name="8ball")
+	async def eight_ball(self, interaction: discord.Interaction, question: str):
 		"""
 		Chiedi qualsiasi cosa al BOT.
+
+		Parameters
+		----------
+		question: str
+			Domanda da fare al BOT
 		"""
 		answers = ['È certo.', 'È decisamente così.', 'Ci puoi scommettere!.', 'Senza dubbio.',
 				   'Sì, sicuramente.', 'Da quel che vedo, si.', 'Probabilmente si.', 'Parebbe di si.', 'Si.',
@@ -133,16 +119,23 @@ class fun(commands.Cog, name="fun"):
 			description=f"{random.choice(answers)}",
 			color=0x00FF00
 		)
-		embed.add_field(name=f"Alla domanda:", value=f"{args}", inline=False)
+		embed.add_field(name=f"Alla domanda:", value=f"{question}", inline=False)
 		embed.set_footer(
-			text=f"Domanda richiesta da: {context.message.author}"
+			text=f"Domanda richiesta da: {interaction.user}"
 		)
 		embed.set_thumbnail(url=f"{self.gitFolder}/8ball/8ball.png")
-		await context.send(embed=embed)
+		await interaction.response.send_message(embed=embed)
 
-	@commands.command(name="dice")
-	@commands.cooldown(1, 5, commands.BucketType.guild)
-	async def dice(self, context, face:int=6):
+	@app_commands.command(name="dice")
+	async def dice(self, interaction: discord.Interaction, face:int=6):
+		"""
+		Tira un dado.
+
+		Parameters
+		----------
+		face: int
+			Numero di facce del dado
+		"""
 
 		embed = discord.Embed(
 			title="**Il dado è tratto!**",
@@ -150,165 +143,113 @@ class fun(commands.Cog, name="fun"):
 			color=0x00FF00
 		)
 		embed.set_thumbnail(url=f"https://media.tenor.com/images/73659ccb799438fa79e9c9a876194f1d/tenor.gif")
-		await context.send(embed=embed)
+		await interaction.response.send_message(embed=embed)
 
 
-	@commands.command(name='hentai', usage=r'>hentai ({TAG})')
-	# @commands.cooldown(1, 1, commands.BucketType.user)
-	async def hentai(self, ctx, *, tag=""):
+	HentaiGroup = app_commands.Group(name="hentai", nsfw=True, description="Hentai")
+
+	@HentaiGroup.command(name="tags", nsfw=True)
+	async def tags(self, interaction: discord.Interaction):
 		"""
-		Invia hentai (tags scrive i tags più popolari)
-		"""
+	 	Invia i tags più popolari.
+	 	"""
 
-		params = {
-			'format':'json'
-		}
-
-		embed = None
-
-		warningEmbed = discord.Embed(
-			title="WARNING",
+		embed = discord.Embed(
+			title="TAGS POPOLARI",
 			colour = discord.Colour.blurple()
 		)
 
-		channel = None
-		if not ctx.channel.is_nsfw():
-			channel = discord.utils.find(lambda channel: channel.is_nsfw(), ctx.guild.text_channels)
-			warningEmbed.add_field(name=f"Messaggi inviato in", value=f"{channel.mention}", inline=False)
-		else:
-			channel = ctx.channel
+		res = requests.get(f'https://danbooru.donmai.us/tags?search[order]=count&limit=24', params={'format':'json'}, timeout=3).json()
+		response = " ".join([x["name"] for x in res])
+		ordinal = 1
+		for tag in res:
+			embed.add_field(name=f"{ordinal}° Posto", value=f"``{tag['name']}``", inline=True)
+			ordinal += 1
+		embed.add_field(name=f"({ordinal}° Posto)", value=f"``socks``", inline=True)
 
-		if tag == 'tags':
+		await interaction.response.send_message(embed=embed)
 
-			embed = discord.Embed(
-				title="TAGS POPOLARI",
-				colour = discord.Colour.blurple()
-			)
+	@HentaiGroup.command(name="find", nsfw=True)
+	async def find(self, interaction: discord.Interaction, tag: str):
+		"""
+	 	Invia un immagine hentai relativa al tag inserito.
 
+		Parameters
+		----------
+		tag: str
+			Nome del tag
+	 	"""
 
-			res = requests.get(f'https://danbooru.donmai.us/tags?search[order]=count&limit=24', params=params, timeout=3).json()
-			response = " ".join([x["name"] for x in res])
-			ordinal = 1
-			for tag in res:
-				embed.add_field(name=f"{ordinal}° Posto", value=f"``{tag['name']}``", inline=True)
-				ordinal += 1
-			embed.add_field(name=f"({ordinal}° Posto)", value=f"``socks``", inline=True)
+		tag = tag.lower().replace(" ", "_")
 
-		else:	
-			await ctx.message.delete()
+		try:
+			res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params={'format':'json'}, timeout=3).json()
 
-			tag = tag.lower().replace(" ", "_")
+			image = res["file_url"]
+		except Exception as e:
+			print(e)
+			return
 
-			print("HENTAI")
+		embed = discord.Embed()
+		embed.set_image(url=image)
+		text =  ", ".join([f"{x}" for x in res["tag_string"].split(' ')])
+		embed.set_footer(text=f"Tags: {text}")
 
-			try:
-				res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params=params, timeout=3).json()
+		await interaction.response.send_message(embed=embed, ephemeral=True)
 
-				image = res["file_url"]
-			except Exception as e:
-				print(e)
-				return
+	@app_commands.command(name='quiz')
+	async def quiz(self, interaction: discord.Interaction):
+		"""
+		Richiedi un quiz su un anime.
+		"""
 
-			embed = discord.Embed()
-			embed.set_image(url=image)
-			text =  ", ".join([f"{x}" for x in res["tag_string"].split(' ')])
-			embed.set_footer(text=f"Tags: {text}")
-
-		await channel.send(embed=embed)
-		
-		if not ctx.channel.is_nsfw():
-			await ctx.channel.send(embed=warningEmbed)
-
-	@commands.command(name='quiz', help='quiz', usage=r'>quiz')
-	async def quiz(self, ctx, user:discord.User=None):
-
-		res = {True:'👍', False:'👎'}
 
 		f=open('json/quiz.json', 'r')
 		domande = json.loads(f.read())
 		f.close()
 
-		if user==None:
-			user = ctx.message.author
+		quiz = random.choice(domande)
+		# quiz['domanda']			
 
 
-		channel = ctx.message.channel
-		Quiz = random.choice(domande)
+		class InputQuiz(discord.ui.Select):
+			async def callback(self, *s):
+				self.view.stop()
+				
+
+		modal = discord.ui.View(timeout=20)
+		select = InputQuiz(options=[
+			discord.SelectOption(label="Vero"),
+			discord.SelectOption(label="Falso")
+		])
+		modal.add_item(select)
 
 		embed = discord.Embed(
 			title="QUIZ",
 			colour=discord.Colour.dark_grey(),
-			description="Hai 20 secondi per rispondere vero (👍) o falso (👎)."
+			description="Hai 20 secondi per rispondere."
 		)
-		embed.add_field(name="Domanda", value=f"``{Quiz['domanda']}``", inline=False)
-		embed.add_field(name="Per", value=f"{user.mention}", inline=True)
+		embed.add_field(name="Domanda", value=f"``{quiz['domanda']}``", inline=False)
+		embed.add_field(name="Per", value=f"{interaction.user.mention}", inline=True)
 		embed.add_field(name="Penalità", value=f"**Morte**", inline=True)
 		embed.set_thumbnail(url=f"{self.gitFolder}/quiz/quiz.png")
 
-		message = await channel.send(embed=embed)
-		await message.add_reaction('👍')
-		await message.add_reaction('👎')
+		await interaction.response.send_message(embed=embed, view=modal)
 
-		def check(reaction, userx):
-			return userx == user and reaction.message == message
-
-		try:
-			reaction, userx = await self.bot.wait_for('reaction_add', timeout=20, check=check)
-
-			if str(reaction.emoji) != res[Quiz["risposta"]]: raise
-		except Exception:
-			await self.bot.get_command('kill').callback(self, ctx, user)
-		else:
-			await channel.send('👍')
-
-	@commands.command(name='tag', usage=r'>tag {USER}')
-	async def tag(self, ctx, user:discord.User):
-		"""
-		Tagga qualcuno.
-		"""
-		await ctx.channel.send(f"{user.name} ATTACK!!!")
 		
-		for x in range(5):
-			await ctx.channel.send(user.mention)
-			await asyncio.sleep(1)
 
-	@commands.command(name='surprise', usage=r'>tag')
-	async def surprise(self, ctx):
-		"""
-		È una sorpresa.
-		"""
+		await modal.wait()
+		modal.clear_items()
+		
+		if len(select.values):
+			res = select.values[0]
+			if (res == "Vero") == quiz["risposta"]:
+				await interaction.edit_original_response(content ="Corretto", view=None, embed=None)
+				return
 
-
-		embed = discord.Embed(
-			title="Surprise!",
-			description="🎉🎉🎉🎉",
-			colour = discord.Colour.blurple()
-		)
-
-		embed.set_image(url="https://media1.tenor.com/images/7ded99794cae56c4ceb907c652c4428f/tenor.gif?itemid=20423186")
-
-		await ctx.channel.send(embed=embed)
-
-	@commands.command(name="nick")
-	@check.has_role(783255213230391296, 698597723451949076) # 「🔖」TeamScan
-	async def nick(self, context, member: discord.Member, *, name: str=None):
-		"""
-		Cambia il nickname di un Membro del Server.
-		"""
-		if member.top_role < context.guild.get_member(self.bot.user.id).top_role:
-
-			embed = discord.Embed(
-				title="Nickname Cambiato!",
-				description=f"Il nuovo nickname di **{member}** è **{name}**!",
-				color=0x00FF00
-			)
-			await context.send(embed=embed)
-			await member.edit(nick=name)
-
-		else:
-			raise discord.ext.commands.CommandError(f"{self.bot.user.mention} non può modificare il nickname di {member.mention}")
+		await interaction.edit_original_response(content ="Sbagliato", view=None, embed=None)
+		
 
 
-
-def setup(bot):
-	bot.add_cog(fun(bot))
+async def setup(bot):
+	await bot.add_cog(fun(bot))

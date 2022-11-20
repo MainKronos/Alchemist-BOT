@@ -1,49 +1,34 @@
 import discord
-from discord.ext import commands
+from discord import app_commands
 from jobs.bot import bot
 
 # The code in this event is executed every time a valid commands catches an error
-@bot.event
-async def on_command_error(ctx, error):
-	print(f"ERRORE in {ctx.guild.name} by {ctx.message.author}: {error} ")
+@bot.tree.error
+async def on_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
+	print(f"ERRORE in {interaction.guild.name} by {interaction.user}: {error} ")
 
 	embed = discord.Embed(
 		title = "ERROR",
 		colour = discord.Colour.red()
 	)
 
-	if isinstance(error, commands.CommandNotFound):
-		embed.add_field(name=f"Comando '{ctx.invoked_with}' inesistente.", value="Usare >help per maggiori informazioni", inline=False)
-		await ctx.channel.send(embed=embed, delete_after=10)
-		return
-	
-	if isinstance(error, commands.DisabledCommand):
-		embed.add_field(name=f"{ctx.author.name}", value="Questo comando è stato disabilitato.", inline=False)
-		await ctx.channel.send(embed=embed, delete_after=10)
+	if isinstance(error, app_commands.CommandNotFound):
+		embed.add_field(name=f"Comando '{interaction.command}' inesistente.", value="Controllare meglio.", inline=False)
+		await interaction.response.send_message(embed=embed, delete_after=10, ephemeral=True)
 		return
 
-	if isinstance(error, commands.CheckFailure):
-		embed.add_field(name=f"{ctx.author.name}", value="Non hai i permessi necessari per usare questo comando.", inline=False)
-		await ctx.channel.send(embed=embed, delete_after=10)
+	if isinstance(error, app_commands.CheckFailure):
+		embed.add_field(name=f"{interaction.user.mention}", value="Non hai i permessi necessari per usare questo comando.", inline=False)
+		await interaction.response.send_message(embed=embed, delete_after=10, ephemeral=True)
 		return
 
-	if isinstance(error, commands.CommandOnCooldown):
-		embed.add_field(name=f"{ctx.author.name}", value="Riprova fra %.2fs" % error.retry_after, inline=False)
-		await ctx.channel.send(embed=embed, delete_after=10)
-		return
-
-	if isinstance(error, commands.BadArgument):
-		embed.add_field(name=f"{ctx.author.name}", value=f"{error}", inline=False)
-		await ctx.channel.send(embed=embed, delete_after=10)
-		return
-
-	if isinstance(error, commands.RoleNotFound):
-		embed.add_field(name=f"{ctx.author.name}", value=f"{error}", inline=False)
-		await ctx.channel.send(embed=embed, delete_after=10)
+	if isinstance(error, app_commands.CommandOnCooldown):
+		embed.add_field(name=f"{interaction.user.mention}", value="Riprova fra %.2fs" % error.retry_after, inline=False)
+		await interaction.response.send_message(embed=embed, delete_after=10, ephemeral=True)
 		return
 
 	try:
-		embed.add_field(name=f"{ctx.author.name}", value=f"{error}", inline=False)
-		await ctx.channel.send(embed=embed, delete_after=10)
+		embed.add_field(name=f"{interaction.user.mention}", value=f"{error}", inline=False)
+		await interaction.response.send_message(embed=embed, delete_after=10, ephemeral=True)
 	except Exception as e:
 		pass

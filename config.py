@@ -5,6 +5,3 @@ BOT_PREFIX = (">")
 TOKEN = os.getenv('TOKEN')
 
 GIT_FOLDER = "https://raw.githubusercontent.com/MainKronos/Alchemist-BOT/master/img"
-
-KILLED = {} # Persone uccise
-BANNED = set() # Persone bannate

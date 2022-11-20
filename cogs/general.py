@@ -1,14 +1,13 @@
-import os, sys, discord, platform, random, aiohttp, json
-from discord.ext import commands
-import config
-from jobs import check, utils
+import os, sys, discord, platform
+from discord.ext.commands import Cog
+from discord import app_commands
 
-class general(commands.Cog, name="general"):
+class general(Cog, name="general"):
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.command(name="info", aliases=["botinfo"])
-	async def info(self, context):
+	@app_commands.command(name="info")
+	async def info(self, interaction: discord.Interaction):
 		"""
 		Informazioni sul BOT.
 		"""
@@ -21,7 +20,7 @@ class general(commands.Cog, name="general"):
 		)
 		embed.add_field(
 			name="Owner:",
-			value="Krónos#9268",
+			value=self.bot.get_user(self.bot.owner_id),
 			inline=True
 		)
 		embed.add_field(
@@ -29,22 +28,17 @@ class general(commands.Cog, name="general"):
 			value=f"{platform.python_version()}",
 			inline=True
 		)
-		embed.add_field(
-			name="Prefix:",
-			value=f"{config.BOT_PREFIX}",
-			inline=False
-		)
 		embed.set_footer(
-			text=f"Requested by {context.message.author}"
+			text=f"Requested by {interaction.user}"
 		)
-		await context.send(embed=embed)
+		await interaction.response.send_message(embed=embed)
 
-	@commands.command(name="serverinfo")
-	async def serverinfo(self, context):
+	@app_commands.command(name="serverinfo")
+	async def serverinfo(self, interaction: discord.Interaction):
 		"""
 		Informazioni sul Server.
 		"""
-		server = context.message.guild
+		server = interaction.message.guild
 		roles = [x.name for x in server.roles]
 		role_length = len(roles)
 		if role_length > 50:
@@ -87,10 +81,10 @@ class general(commands.Cog, name="general"):
 		embed.set_footer(
 			text=f"Created at: {time}"
 		)
-		await context.send(embed=embed)
+		await interaction.response.send_message(embed=embed)
 
-	@commands.command(name="ping")
-	async def ping(self, context):
+	@app_commands.command(name="ping")
+	async def ping(self, interaction: discord.Interaction):
 		"""
 		Controlla se il BOT è vivo.
 		"""
@@ -103,65 +97,70 @@ class general(commands.Cog, name="general"):
 			inline=True
 		)
 		embed.set_footer(
-			text=f"Pong request by {context.message.author}"
+			text=f"Pong request by {interaction.user}"
 		)
-		await context.send(embed=embed)
+		await interaction.response.send_message(embed=embed)
 
-	@commands.command(name="poll")
-	@commands.cooldown(1, 5, commands.BucketType.guild)
-	async def poll(self, context, *args):
+	@app_commands.command(name="poll")
+	async def poll(self, interaction: discord.Interaction, description: str):
 		"""
 		Crea una poll dove i mambri possono votare.
+
+		Parameters
+		----------
+		description: str
+			Descrizione della poll
 		"""
-		poll_title = " ".join(args)
+
 		embed = discord.Embed(
 			title="Una nuova Poll è stata creata!",
-			description=f"{poll_title}",
+			description=f"{description}",
 			color=0x00FF00
 		)
 		embed.set_footer(
-			text=f"Poll creata da: {context.message.author} • React per votare!"
+			text=f"Poll creata da: {interaction.user} • React per votare!"
 		)
-		embed_message = await context.send(embed=embed)
+		await interaction.response.send_message(embed=embed)
+		embed_message = await interaction.original_response()
 		await embed_message.add_reaction("👍")
 		await embed_message.add_reaction("👎")
 		await embed_message.add_reaction("🤷")
 
-	@commands.command(name="mclose", aliases=["mshutdown", "mturnoff", "mquit", "mexit"])
-	@commands.check(check.is_admin)
-	async def mclose(self, context):
-		"""
-		Spegnimento manuale in caso di problemi.
-		"""
+	# @commands.command(name="mclose", aliases=["mshutdown", "mturnoff", "mquit", "mexit"])
+	# @commands.check(check.is_admin)
+	# async def mclose(self, context):
+	# 	"""
+	# 	Spegnimento manuale in caso di problemi.
+	# 	"""
 
-		NumeroAdmin = 2
-		TempoLimite = 60
+	# 	NumeroAdmin = 2
+	# 	TempoLimite = 60
 
 
-		embed = discord.Embed(
-			title="SPEGNIMENTO MANUALE",
-			colour=discord.Colour.dark_grey(),
-			description=f"Per completare lo spegnimento manuale sono necessari {NumeroAdmin} 👍 da parte di {NumeroAdmin} amministratori entro {TempoLimite} secondi.\nDopo lo spegnimento non sarà più possibile riaccendere il bot."
-		)
-		embed.set_thumbnail(url=f"{config.GIT_FOLDER}/general/mclose/power.png")
+	# 	embed = discord.Embed(
+	# 		title="SPEGNIMENTO MANUALE",
+	# 		colour=discord.Colour.dark_grey(),
+	# 		description=f"Per completare lo spegnimento manuale sono necessari {NumeroAdmin} 👍 da parte di {NumeroAdmin} amministratori entro {TempoLimite} secondi.\nDopo lo spegnimento non sarà più possibile riaccendere il bot."
+	# 	)
+	# 	embed.set_thumbnail(url=f"{config.GIT_FOLDER}/general/mclose/power.png")
 
-		message = await context.send(embed=embed)
-		await message.add_reaction('👍')
+	# 	message = await context.send(embed=embed)
+	# 	await message.add_reaction('👍')
 
-		def check(reaction, userx):
-			if reaction.message == message:
-				if userx.guild_permissions.administrator:
-					if str(reaction.emoji) == '👍':
-						if reaction.count == NumeroAdmin+1:
-							return True
+	# 	def check(reaction, userx):
+	# 		if reaction.message == message:
+	# 			if userx.guild_permissions.administrator:
+	# 				if str(reaction.emoji) == '👍':
+	# 					if reaction.count == NumeroAdmin+1:
+	# 						return True
 
-		try:
-			await self.bot.wait_for('reaction_add', timeout=TempoLimite, check=check)
-		except Exception as e:
-			print(e)
-			raise discord.ext.commands.CommandError("Spegnimento Manuale fallito.")
-		else:
-			await self.bot.get_command('close').callback(self, context)
+	# 	try:
+	# 		await self.bot.wait_for('reaction_add', timeout=TempoLimite, check=check)
+	# 	except Exception as e:
+	# 		print(e)
+	# 		raise discord.ext.commands.CommandError("Spegnimento Manuale fallito.")
+	# 	else:
+	# 		await self.bot.get_command('close').callback(self, context)
 
-def setup(bot):
-	bot.add_cog(general(bot))
+async def setup(bot):
+	await bot.add_cog(general(bot))
