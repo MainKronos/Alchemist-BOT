@@ -19,6 +19,7 @@ async def on_ready():
 	print(f"Discord.py API version: {discord.__version__}")
 	print(f"Python version: {platform.python_version()}")
 	print(f"Running on: {platform.system()} {platform.release()} ({os.name})")
+	print(f"Owner: {bot.get_user(bot.owner_id)}")
 
 	print("\n ------------------------------------\n")
 

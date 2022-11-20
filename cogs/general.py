@@ -20,7 +20,7 @@ class general(Cog, name="general"):
 		)
 		embed.add_field(
 			name="Owner:",
-			value=self.bot.get_user(self.bot.owner_id),
+			value=self.bot.get_user(self.bot.owner_id).mention,
 			inline=True
 		)
 		embed.add_field(

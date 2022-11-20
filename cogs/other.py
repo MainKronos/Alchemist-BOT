@@ -13,7 +13,7 @@ class manga(commands.Cog, name="manga"): # Posta i manga usciti
 	async def get_last_chapter(self):
 		regex = re.compile(r'https:\/\/mangadex\.org\/chapter\/(\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b)')
 		ch = self.channel
-		message = discord.utils.find(lambda message: regex.search(message.content), await ch.history(limit=50))
+		message = discord.utils.find(lambda message: regex.search(message.content), [x async for x in ch.history(limit=50)])
 		return regex.search(message.content).group(1)
 
 	def chapters(self, chapterID):
