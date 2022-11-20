@@ -33,10 +33,7 @@ async def on_ready():
 	
 	print("\n╰------------------------------------╯\n")	
 
-
-	MY_GUILD = discord.Object(id=173069024236666880)
-	bot.tree.copy_global_to(guild=MY_GUILD)
-	await bot.tree.sync(guild=MY_GUILD)
+	await bot.tree.sync(guild=None)
 
 # Setup the game status task of the bot
 
