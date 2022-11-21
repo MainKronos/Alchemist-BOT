@@ -182,13 +182,17 @@ class fun(Cog, name="fun"):
 
 		tag = tag.lower().replace(" ", "_")
 
-		try:
-			res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params={'format':'json'}, timeout=3).json()
+		while True:
+			try:
+				res = requests.get(f'https://danbooru.donmai.us/posts/random?tags=score%3A>50+rating%3Aexplicit+{tag}', params={'format':'json'}, timeout=3).json()
 
-			image = res["file_url"]
-		except Exception as e:
-			print(e)
-			return
+				image = res["file_url"]
+				break
+			except KeyError:
+				pass
+			except Exception as e:
+				print(e)
+				return
 
 		embed = discord.Embed()
 		embed.set_image(url=image)
