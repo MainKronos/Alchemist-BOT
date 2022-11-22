@@ -18,17 +18,17 @@ async def on_command_error(interaction: discord.Interaction, error: app_commands
 		return
 
 	if isinstance(error, app_commands.CheckFailure):
-		embed.add_field(name=f"{interaction.user.mention}", value="Non hai i permessi necessari per usare questo comando.", inline=False)
+		embed.add_field(name=f"{interaction.user}", value="Non hai i permessi necessari per usare questo comando.", inline=False)
 		await interaction.response.send_message(embed=embed, delete_after=10, ephemeral=True)
 		return
 
 	if isinstance(error, app_commands.CommandOnCooldown):
-		embed.add_field(name=f"{interaction.user.mention}", value="Riprova fra %.2fs" % error.retry_after, inline=False)
+		embed.add_field(name=f"{interaction.user}", value="Riprova fra %.2fs" % error.retry_after, inline=False)
 		await interaction.response.send_message(embed=embed, delete_after=10, ephemeral=True)
 		return
 
 	try:
-		embed.add_field(name=f"{interaction.user.mention}", value=f"{error}", inline=False)
+		embed.add_field(name=f"{interaction.user}", value=f"{error}", inline=False)
 		await interaction.response.send_message(embed=embed, delete_after=10, ephemeral=True)
 	except Exception as e:
 		pass
